@@ -1,1 +1,2 @@
-import pillow as PIL
+import PIL as pil
+print('123')
