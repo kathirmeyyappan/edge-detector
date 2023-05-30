@@ -6,5 +6,5 @@ pylint>=2.13.6
 pygame>=2.3.0
 pytest>=3.9.1
 pytest-mypy>=0.10.3
-numpy
-pillow
+numpy>=1.24.3
+pillow>=9.5.0
