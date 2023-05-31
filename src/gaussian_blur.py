@@ -30,8 +30,8 @@ def find_kernel_range(dimensions: Tuple[int, int], center: Tuple[int, int],
     """
     y_max, x_max = dimensions
     x, y = center
-    return [(max(0, x - 4 * sigma), min(x_max, x + 4 * sigma)), 
-            (max(0, y - 4 * sigma), min(y_max, y + 4 * sigma))]
+    return [(max(0, x - 4 * sigma), min(x_max - 1, x + 4 * sigma)), 
+            (max(0, y - 4 * sigma), min(y_max - 1, y + 4 * sigma))]
     
     
 def get_kernel(im_arr: np.ndarray, 
@@ -66,7 +66,8 @@ def get_kernel(im_arr: np.ndarray,
             coef = 1 / (2 * np.pi * sigma**2)
             exp_term = np.exp(- ((x-x_cen)**2 + (y-y_cen)**2) / (2 * sigma**2))
             weight = coef * exp_term
-            kernel[y, x] = np.array([weight] * 3)
+            kernel[y - y_min, x - x_min] = np.array([weight] * 3)
+    
     # normalizing kernel values so that total sum is 3.00 (1.00 for each RGB)
     return kernel / np.sum(kernel) * 3
 
@@ -108,14 +109,17 @@ def guassian_blur(im_arr: np.ndarray, sigma: int) -> np.ndarray:
     for y, row in enumerate(im_arr):
         for x, _ in enumerate(row):
             kernel = get_kernel(im_arr, (x, y), sigma)
+            
             # matching image portion location and dimensions to kernel
             h, w, _ = im_arr.shape
             im_range = find_kernel_range((h, w), (x, y), sigma)
             x_min, x_max = im_range[0]
             y_min, y_max = im_range[1]
             im_section = im_arr[y_min:y_max+1, x_min:x_max+1]
+            
             # putting blurred pixel into new image array
             new_im_arr[y, x] = pixel_calculate(kernel, im_section)
+    
     return new_im_arr
 
 
