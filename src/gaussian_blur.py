@@ -1,11 +1,7 @@
 from PIL import Image
-from PIL.Image import Image as ImgObj
 import numpy as np
 from typing import List, Tuple, Optional
 import click
-
-
-
 
 def make_red():
     with Image.open("images/luffy.jpg") as im:
@@ -31,22 +27,23 @@ def gaussian_blur(im_arr: np.ndarray, sigma: int) -> np.ndarray:
         np.ndarray: Array representation of the blurred image
     """
     new_im_arr = im_arr.copy()
+    kernel = get_kernel(sigma)
     for y, row in enumerate(im_arr):
+        print(y)
         for x, _ in enumerate(row):
-            kernel = get_kernel(im_arr, (x, y), sigma)
-            # matching image portion location and dimensions to kernel
+            # matching image and kernel piece dimensions
             h, w, _ = im_arr.shape
-            im_range = find_kernel_range((h, w), (x, y), sigma)
+            im_range = find_range((h, w), (x, y), sigma)
             x_min, x_max = im_range[0]
             y_min, y_max = im_range[1]
-            im_section = im_arr[y_min:y_max+1, x_min:x_max+1]
-            
+            im_piece = im_arr[y_min:y_max+1, x_min:x_max+1]
+            kernel_piece = get_kernel_piece(kernel, im_range)
             # putting blurred pixel into new image array
-            new_im_arr[y, x] = pixel_calculate(kernel, im_section)
+            new_im_arr[y, x] = pixel_calculate(kernel_piece, im_piece)
     
     return new_im_arr
 
-def find_kernel_range(dimensions: Tuple[int, int], center: Tuple[int, int], 
+def find_range(dimensions: Tuple[int, int], center: Tuple[int, int], 
                       sigma: int) -> List[Tuple[int, int]]:
     """
     Finds coordinate range for finding the kernel with a given image size and 
@@ -67,41 +64,62 @@ def find_kernel_range(dimensions: Tuple[int, int], center: Tuple[int, int],
             (max(0, y - 3 * sigma), min(y_max - 1, y + 3 * sigma))]
     
     
-def get_kernel(im_arr: np.ndarray, 
-               center: Tuple[int, int], sigma: int) -> np.ndarray:
+def get_kernel(sigma: int) -> np.ndarray:
     """
-    Calculates the kernel (which will be used for convolution) using the
+    Pre-calculates the kernel (which will be used for convolution) using the
         2 dimensional guassian distribution.
 
     Args:
-        im_arr (np.ndarray): 3-d array representation of image.
-        center (Tuple[int, int]): Coordinate for pixel that we are calculating 
-            the kernel for.
         sigma (int): Standard deviation in guassian distribution. Serves as the
             strength of the blur for our purposes.
     
     Returns:
-        np.ndarray: Kernel with weighted values summing to 3.00 (which 
+        np.ndarray: Generic kernel with guassin distribution in 2-d.
+    """
+    # creating kernel using 2-d guassian distribution
+    kernel = np.zeros((6 * sigma + 1, 6 * sigma + 1, 3))
+    for y in range(-3 * sigma, 3 * sigma + 1):
+        for x in range(-3 * sigma, 3 * sigma + 1):
+            coef = 1 / (2 * np.pi * sigma**2)
+            exp_term = np.exp(- (x**2 + y**2) / (2 * sigma**2))
+            weight = coef * exp_term
+            kernel[y + 3 * sigma, x + 3 * sigma] = np.array([weight] * 3)
+    return kernel
+
+
+def get_kernel_piece(kernel: np.ndarray, 
+                     im_range: List[Tuple[int, int]]) -> np.ndarray:
+    """
+    Normalizes and crops kernel based on respective pixel position so that its
+        dimensions match with the image piece for hadamard product.
+
+    Args:
+        kernel (np.ndarray): Generic uncropped kernel.
+        im_range (List[Tuple[int, int]]): Coordinate ranges to apply crop.
+
+    Returns:
+        np.ndarray: Cropped kernel with weighted values summing to 3.00 (which 
             guarantees that each RGB will be weighted properly to 1.00). Will be 
             used for convolution. 
     """
-    # creating kernel using 2-d guassian distribution
-    x_cen, y_cen = center
-    kernel_range = find_kernel_range((im_arr.shape[0], im_arr.shape[1]), 
-                                     center, sigma)
-    x_min, x_max = kernel_range[0]
-    y_min, y_max = kernel_range[1]
-    kernel = np.zeros(((y_max - y_min + 1), (x_max - x_min + 1), 3))
+    x_min, x_max = im_range[0]
+    y_min, y_max = im_range[1]
+    kernel_piece = kernel.copy()
     
-    for y in range(y_min, y_max + 1):
-        for x in range(x_min, x_max + 1):
-            coef = 1 / (2 * np.pi * sigma**2)
-            exp_term = np.exp(- ((x-x_cen)**2 + (y-y_cen)**2) / (2 * sigma**2))
-            weight = coef * exp_term
-            kernel[y - y_min, x - x_min] = np.array([weight] * 3)
-    
+    if y_max - y_min + 1 < kernel.shape[0]:
+        if y_min == 0:
+            kernel_piece = kernel_piece[:y_max + 1]
+        else:
+            kernel_piece = kernel_piece[kernel.shape[0] - (y_max - y_min + 1):]
+            
+    if x_max - x_min + 1 < kernel.shape[1]:
+        if x_min == 0:
+            kernel_piece = kernel_piece[:, :x_max + 1]
+        else:
+            kernel_piece = kernel_piece[:, kernel.shape[1] - (x_max - x_min + 1):]
+
     # normalizing kernel values so that total sum is 3.00 (1.00 for each RGB)
-    return kernel / np.sum(kernel) * 3
+    return kernel_piece / np.sum(kernel_piece) * 3
 
 
 def pixel_calculate(kernel: np.ndarray, og_img: np.ndarray) -> np.ndarray:
@@ -130,7 +148,7 @@ def pixel_calculate(kernel: np.ndarray, og_img: np.ndarray) -> np.ndarray:
 @click.option('-f', '--filename', type=click.Path(exists=True))
 @click.option('-s', '--sigma-value', type=int, default=1)
 
-def blur(filename: ImgObj, sigma_value: int) -> None:
+def blur(filename: str, sigma_value: int) -> None:
     with Image.open(filename) as im:
         im.show()
         im_arr: np.ndarray
