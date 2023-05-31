@@ -1,6 +1,11 @@
 from PIL import Image
+from PIL.Image import Image as ImgObj
 import numpy as np
 from typing import List, Tuple, Optional
+import click
+
+
+
 
 def make_red():
     with Image.open("images/luffy.jpg") as im:
@@ -13,11 +18,39 @@ def make_red():
         new_im.show()
 
 
+def gaussian_blur(im_arr: np.ndarray, sigma: int) -> np.ndarray:
+    """
+    Operates on array representation of image to return a guassian blurred array
+
+    Args:
+        im_arr (np.ndarray): 3-d array representation of image
+        sigma (int): Standard deviation in guassian distribution. Serves as the
+            strength of the blur for our purposes.
+
+    Returns:
+        np.ndarray: Array representation of the blurred image
+    """
+    new_im_arr = im_arr.copy()
+    for y, row in enumerate(im_arr):
+        for x, _ in enumerate(row):
+            kernel = get_kernel(im_arr, (x, y), sigma)
+            # matching image portion location and dimensions to kernel
+            h, w, _ = im_arr.shape
+            im_range = find_kernel_range((h, w), (x, y), sigma)
+            x_min, x_max = im_range[0]
+            y_min, y_max = im_range[1]
+            im_section = im_arr[y_min:y_max+1, x_min:x_max+1]
+            
+            # putting blurred pixel into new image array
+            new_im_arr[y, x] = pixel_calculate(kernel, im_section)
+    
+    return new_im_arr
+
 def find_kernel_range(dimensions: Tuple[int, int], center: Tuple[int, int], 
                       sigma: int) -> List[Tuple[int, int]]:
     """
     Finds coordinate range for finding the kernel with a given image size and 
-        pixel coordinate of interest. Accounts for 4 standard deviations.
+        pixel coordinate of interest. Accounts for 3 standard deviations.
 
     Args:
         dimensions (Tuple[int, int]): Image dimensions (height x width)
@@ -30,8 +63,8 @@ def find_kernel_range(dimensions: Tuple[int, int], center: Tuple[int, int],
     """
     y_max, x_max = dimensions
     x, y = center
-    return [(max(0, x - 4 * sigma), min(x_max - 1, x + 4 * sigma)), 
-            (max(0, y - 4 * sigma), min(y_max - 1, y + 4 * sigma))]
+    return [(max(0, x - 3 * sigma), min(x_max - 1, x + 3 * sigma)), 
+            (max(0, y - 3 * sigma), min(y_max - 1, y + 3 * sigma))]
     
     
 def get_kernel(im_arr: np.ndarray, 
@@ -56,7 +89,6 @@ def get_kernel(im_arr: np.ndarray,
     x_cen, y_cen = center
     kernel_range = find_kernel_range((im_arr.shape[0], im_arr.shape[1]), 
                                      center, sigma)
-    print(center, kernel_range)
     x_min, x_max = kernel_range[0]
     y_min, y_max = kernel_range[1]
     kernel = np.zeros(((y_max - y_min + 1), (x_max - x_min + 1), 3))
@@ -93,40 +125,19 @@ def pixel_calculate(kernel: np.ndarray, og_img: np.ndarray) -> np.ndarray:
     return pixel
 
 
-def guassian_blur(im_arr: np.ndarray, sigma: int) -> np.ndarray:
-    """
-    Operates on array representation of image to return a guassian blurred array
+# click commands
+@click.command(name="gaussian_blur")
+@click.option('-f', '--filename', type=click.Path(exists=True))
+@click.option('-s', '--sigma-value', type=int, default=1)
 
-    Args:
-        im_arr (np.ndarray): 3-d array representation of image
-        sigma (int): Standard deviation in guassian distribution. Serves as the
-            strength of the blur for our purposes.
+def blur(filename: ImgObj, sigma_value: int) -> None:
+    with Image.open(filename) as im:
+        im.show()
+        im_arr: np.ndarray
+        im_arr = np.array(im)
+        new_im_arr = gaussian_blur(im_arr, sigma_value)
+        new_im = Image.fromarray(new_im_arr)
+        new_im.show()
 
-    Returns:
-        np.ndarray: Array representation of the blurred image
-    """
-    new_im_arr = im_arr.copy()
-    for y, row in enumerate(im_arr):
-        for x, _ in enumerate(row):
-            kernel = get_kernel(im_arr, (x, y), sigma)
-            
-            # matching image portion location and dimensions to kernel
-            h, w, _ = im_arr.shape
-            im_range = find_kernel_range((h, w), (x, y), sigma)
-            x_min, x_max = im_range[0]
-            y_min, y_max = im_range[1]
-            im_section = im_arr[y_min:y_max+1, x_min:x_max+1]
-            
-            # putting blurred pixel into new image array
-            new_im_arr[y, x] = pixel_calculate(kernel, im_section)
-    
-    return new_im_arr
-
-
-with Image.open("images/wings_of_freedom.jpg") as im:
-    im.show()
-    im_arr = np.array(im)
-    blurred_im_arr = guassian_blur(im_arr, 3)
-    blurred_image = Image.fromarray(blurred_im_arr)
-    blurred_image.show()
-    
+if __name__ == "__main__":
+    blur()
