@@ -6,7 +6,7 @@ computationally expensive operation which will take quite some time to run on
 larger images or with large sigma values.
 
 Note that this file uses click for command line support. You can run it from 
-the root with: 'python3 filename.py --help" to get started.
+the root with: 'python3 src/filename.py --help' to get started.
 """
 
 from typing import List, Tuple
