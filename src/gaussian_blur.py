@@ -74,7 +74,8 @@ def find_range(dimensions: Tuple[int, int], center: Tuple[int, int],
 def get_kernel(sigma: int) -> np.ndarray:
     """
     Pre-calculates the kernel (which will be used for convolution) using the
-        2 dimensional guassian distribution.
+        2 dimensional guassian distribution. Creates a matrix that extends for
+        3 * sigma in each direction (gaussian weights past that are negligible).
 
     Args:
         sigma (int): Standard deviation in guassian distribution. Serves as the
@@ -155,7 +156,7 @@ def pixel_calculate(kernel: np.ndarray, og_img: np.ndarray) -> np.ndarray:
 # click commands
 @click.command(name="gaussian_blur")
 @click.option('-f', '--filename', type=click.Path(exists=True))
-@click.option('-s', '--sigma-value', type=int, default=1)
+@click.option('-s', '--sigma-value', type=int, default=2)
 @click.option("--progress/--hide-progress", default=True)
 
 def blur(filename: str, sigma_value: int, progress: bool) -> None:
