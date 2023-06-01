@@ -1,52 +1,52 @@
-from PIL import Image
+"""
+This is a from-scratch implementation of the Gaussian Blur function, which
+utilizes the array-form of a given image and the standard Gaussian distribution 
+in 2 dimensions to evenly blur an image. This is a computationally expensive
+operation which will take quite some time to run on larger images or with large 
+sigma values.
+"""
+
+from typing import List, Tuple
 import numpy as np
-from typing import List, Tuple, Optional
+from PIL import Image
 import click
 
-def make_red():
-    with Image.open("images/luffy.jpg") as im:
-        x=1
-        im_arr = np.array(im)
-        for row in im_arr:
-            for pix in row:
-                pix[0] = (x * 255 + pix[0]) // (x + 1)
-        new_im = Image.fromarray(im_arr)
-        new_im.show()
 
-
-def gaussian_blur(im_arr: np.ndarray, sigma: int) -> np.ndarray:
+def gaussian_blur(img_arr: np.ndarray, sigma: int) -> np.ndarray:
     """
     Operates on array representation of image to return a guassian blurred array
 
     Args:
-        im_arr (np.ndarray): 3-d array representation of image
+        img_arr (np.ndarray): 3-d array representation of image
         sigma (int): Standard deviation in guassian distribution. Serves as the
             strength of the blur for our purposes.
 
     Returns:
         np.ndarray: Array representation of the blurred image
     """
-    new_im_arr = im_arr.copy()
+    new_img_arr = img_arr.copy()
     kernel = get_kernel(sigma)
-    for y, row in enumerate(im_arr):
+    for y, row in enumerate(img_arr):
         print(y)
         for x, _ in enumerate(row):
             # matching image and kernel piece dimensions
-            h, w, _ = im_arr.shape
-            im_range = find_range((h, w), (x, y), sigma)
-            x_min, x_max = im_range[0]
-            y_min, y_max = im_range[1]
-            im_piece = im_arr[y_min:y_max+1, x_min:x_max+1]
-            kernel_piece = get_kernel_piece(kernel, im_range)
+            height, width, _ = img_arr.shape
+            img_range = find_range((height, width), (x, y), sigma)
+            x_min, x_max = img_range[0]
+            y_min, y_max = img_range[1]
+            img_piece = img_arr[y_min:y_max+1, x_min:x_max+1]
+            kernel_piece = get_kernel_piece(kernel, img_range)
+            
             # putting blurred pixel into new image array
-            new_im_arr[y, x] = pixel_calculate(kernel_piece, im_piece)
-    
-    return new_im_arr
+            new_img_arr[y, x] = pixel_calculate(kernel_piece, img_piece)
 
-def find_range(dimensions: Tuple[int, int], center: Tuple[int, int], 
+    return new_img_arr
+
+
+def find_range(dimensions: Tuple[int, int], center: Tuple[int, int],
                       sigma: int) -> List[Tuple[int, int]]:
     """
-    Finds coordinate range for finding the kernel with a given image size and 
+    Finds coordinate range for finding the kernel with a given image size and
         pixel coordinate of interest. Accounts for 3 standard deviations.
 
     Args:
@@ -60,10 +60,10 @@ def find_range(dimensions: Tuple[int, int], center: Tuple[int, int],
     """
     y_max, x_max = dimensions
     x, y = center
-    return [(max(0, x - 3 * sigma), min(x_max - 1, x + 3 * sigma)), 
+    return [(max(0, x - 3 * sigma), min(x_max - 1, x + 3 * sigma)),
             (max(0, y - 3 * sigma), min(y_max - 1, y + 3 * sigma))]
-    
-    
+
+
 def get_kernel(sigma: int) -> np.ndarray:
     """
     Pre-calculates the kernel (which will be used for convolution) using the
@@ -72,7 +72,7 @@ def get_kernel(sigma: int) -> np.ndarray:
     Args:
         sigma (int): Standard deviation in guassian distribution. Serves as the
             strength of the blur for our purposes.
-    
+
     Returns:
         np.ndarray: Generic kernel with guassin distribution in 2-d.
     """
@@ -87,36 +87,38 @@ def get_kernel(sigma: int) -> np.ndarray:
     return kernel
 
 
-def get_kernel_piece(kernel: np.ndarray, 
-                     im_range: List[Tuple[int, int]]) -> np.ndarray:
+def get_kernel_piece(kernel: np.ndarray,
+                     img_range: List[Tuple[int, int]]) -> np.ndarray:
     """
     Normalizes and crops kernel based on respective pixel position so that its
         dimensions match with the image piece for hadamard product.
 
     Args:
         kernel (np.ndarray): Generic uncropped kernel.
-        im_range (List[Tuple[int, int]]): Coordinate ranges to apply crop.
+        img_range (List[Tuple[int, int]]): Coordinate ranges to apply crop.
 
     Returns:
-        np.ndarray: Cropped kernel with weighted values summing to 3.00 (which 
-            guarantees that each RGB will be weighted properly to 1.00). Will be 
-            used for convolution. 
+        np.ndarray: Cropped kernel with weighted values summing to 3.00 (which
+            guarantees that each RGB will be weighted properly to 1.00). Will be
+            used for convolution.
     """
-    x_min, x_max = im_range[0]
-    y_min, y_max = im_range[1]
+    x_min, x_max = img_range[0]
+    y_min, y_max = img_range[1]
     kernel_piece = kernel.copy()
-    
+
+    # vertical cropping
     if y_max - y_min + 1 < kernel.shape[0]:
         if y_min == 0:
-            kernel_piece = kernel_piece[:y_max + 1]
-        else:
             kernel_piece = kernel_piece[kernel.shape[0] - (y_max - y_min + 1):]
-            
+        else:
+            kernel_piece = kernel_piece[:y_max - y_min + 1]
+
+    # horizontal cropping
     if x_max - x_min + 1 < kernel.shape[1]:
         if x_min == 0:
-            kernel_piece = kernel_piece[:, :x_max + 1]
-        else:
             kernel_piece = kernel_piece[:, kernel.shape[1] - (x_max - x_min + 1):]
+        else:
+            kernel_piece = kernel_piece[:, :x_max - x_min + 1]
 
     # normalizing kernel values so that total sum is 3.00 (1.00 for each RGB)
     return kernel_piece / np.sum(kernel_piece) * 3
@@ -124,7 +126,7 @@ def get_kernel_piece(kernel: np.ndarray,
 
 def pixel_calculate(kernel: np.ndarray, og_img: np.ndarray) -> np.ndarray:
     """
-    Calculates RGB value for given pixel based on identically dimensioned 
+    Calculates RGB value for given pixel based on identically dimensioned
         kernel and original image. Utilizes Hadamard product before we take the
         pseudo-sum to obtain 1x3 array for RGB.
 
@@ -149,13 +151,16 @@ def pixel_calculate(kernel: np.ndarray, og_img: np.ndarray) -> np.ndarray:
 @click.option('-s', '--sigma-value', type=int, default=1)
 
 def blur(filename: str, sigma_value: int) -> None:
-    with Image.open(filename) as im:
-        im.show()
-        im_arr: np.ndarray
-        im_arr = np.array(im)
-        new_im_arr = gaussian_blur(im_arr, sigma_value)
-        new_im = Image.fromarray(new_im_arr)
-        new_im.show()
+    """
+    command line operation
+    """
+    with Image.open(filename) as img:
+        img.show()
+        img_arr: np.ndarray
+        img_arr = np.array(img)
+        new_img_arr = gaussian_blur(img_arr, sigma_value)
+        new_img = Image.fromarray(new_img_arr)
+        new_img.show()
 
 if __name__ == "__main__":
     blur()
