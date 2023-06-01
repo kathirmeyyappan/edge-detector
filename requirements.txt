@@ -1,11 +1,7 @@
 click>=7.0
-GitPython>=3.1.31
 ipython>=8.11
 mypy>=1.1.1
 pylint>=2.13.6
 pygame>=2.3.0
-pytest>=3.9.1
-pytest-mypy>=0.10.3
 numpy>=1.24.3
 pillow>=9.5.0
-types-Pillow>=9.5.0.4
