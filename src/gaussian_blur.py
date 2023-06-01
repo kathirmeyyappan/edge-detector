@@ -1,9 +1,12 @@
 """
 This is a from-scratch implementation of the Gaussian Blur function, which
 utilizes the array-form of a given image and the standard Gaussian distribution 
-in 2 dimensions to evenly blur an image. This is a computationally expensive
-operation which will take quite some time to run on larger images or with large 
-sigma values.
+in 2 dimensions to evenly blur an image with a kernel matrix. This is a 
+computationally expensive operation which will take quite some time to run on 
+larger images or with large sigma values.
+
+Note that this file uses click for command line support. You can run it from 
+the root with: 'python3 filename.py --help" to get started.
 """
 
 from typing import List, Tuple
