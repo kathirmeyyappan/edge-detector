@@ -15,7 +15,7 @@ from PIL import Image
 import click
 
 
-def gaussian_blur(img_arr: np.ndarray, sigma: int) -> np.ndarray:
+def gaussian_blur(img_arr: np.ndarray, sigma: int, msg: bool) -> np.ndarray:
     """
     Operates on array representation of image to return a guassian blurred array
 
@@ -23,6 +23,8 @@ def gaussian_blur(img_arr: np.ndarray, sigma: int) -> np.ndarray:
         img_arr (np.ndarray): 3-d array representation of image
         sigma (int): Standard deviation in guassian distribution. Serves as the
             strength of the blur for our purposes.
+        msg (bool): Option to display a progress message every time a row is 
+            completed
 
     Returns:
         np.ndarray: Array representation of the blurred image
@@ -30,7 +32,8 @@ def gaussian_blur(img_arr: np.ndarray, sigma: int) -> np.ndarray:
     new_img_arr = img_arr.copy()
     kernel = get_kernel(sigma)
     for y, row in enumerate(img_arr):
-        print(y)
+        if msg:
+            print(f"{y}/{img_arr.shape[0]} pixel rows calculated")
         for x, _ in enumerate(row):
             # matching image and kernel piece dimensions
             height, width, _ = img_arr.shape
@@ -42,7 +45,8 @@ def gaussian_blur(img_arr: np.ndarray, sigma: int) -> np.ndarray:
             
             # putting blurred pixel into new image array
             new_img_arr[y, x] = pixel_calculate(kernel_piece, img_piece)
-
+    if msg: 
+        print("done!")
     return new_img_arr
 
 
@@ -152,8 +156,9 @@ def pixel_calculate(kernel: np.ndarray, og_img: np.ndarray) -> np.ndarray:
 @click.command(name="gaussian_blur")
 @click.option('-f', '--filename', type=click.Path(exists=True))
 @click.option('-s', '--sigma-value', type=int, default=1)
+@click.option("--progress/--hide-progress", default=True)
 
-def blur(filename: str, sigma_value: int) -> None:
+def blur(filename: str, sigma_value: int, progress: bool) -> None:
     """
     command line operation
     """
@@ -161,7 +166,7 @@ def blur(filename: str, sigma_value: int) -> None:
         img.show()
         img_arr: np.ndarray
         img_arr = np.array(img)
-        new_img_arr = gaussian_blur(img_arr, sigma_value)
+        new_img_arr = gaussian_blur(img_arr, sigma_value, progress)
         new_img = Image.fromarray(new_img_arr)
         new_img.show()
 
