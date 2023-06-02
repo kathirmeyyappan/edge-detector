@@ -164,8 +164,6 @@ def blur(filename: str, sigma_value: int, progress: bool) -> None:
     command line operation
     """
     with Image.open(filename) as img:
-        img.show()
-        img_arr: np.ndarray
         img_arr = np.array(img)
         new_img_arr = gaussian_blur(img_arr, sigma_value, progress)
         new_img = Image.fromarray(new_img_arr)
