@@ -2,7 +2,8 @@ from typing import List, Tuple
 import numpy as np
 from PIL import Image
 
-def simple_crop(img_arr: np.ndarray, top_left: Tuple[int, int], bottom_right: Tuple[int, int]) -> np.ndarray:
+def simple_crop(img_arr: np.ndarray, top_left: Tuple[int, int], 
+                bottom_right: Tuple[int, int]) -> np.ndarray:
     """
     Crops the array representation of an image (rectagularly) given the 
         top-right and bottom-left indices.
