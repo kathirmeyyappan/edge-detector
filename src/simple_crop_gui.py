@@ -52,12 +52,23 @@ class CropApp:
             x1, y1 = top_left
             x2, y2 = bottom_right
             
-            
+            # drawing translucent crop rectangle
             crop_rect = pygame.Surface((x2-x1, y2-y1))
             crop_rect.fill((200, 200, 200))
             crop_rect.set_alpha(150)
             self.surface.blit(crop_rect, (x1, y1))
+            
+            # drawing top-left and bottom-right circles
+            for coord in self.cropper:
+                pygame.draw.circle(self.surface, color=(255, 0, 0), 
+                                   center=coord, radius=8)
+                pygame.draw.circle(self.surface, color=(0, 0, 0), 
+                                   center=coord, radius=8, width=3)
+    
+    def move_cropper():
         
+        raise NotImplementedError
+            
     def event_loop(self) -> None:
         """
         Handles user interactions
