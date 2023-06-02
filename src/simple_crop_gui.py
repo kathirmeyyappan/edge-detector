@@ -1,8 +1,9 @@
 """
-This is a GUI implementation of the simple cropping algorithm. Upon clicking,
-a rectangle will show. This rectangle can be dragged and resized. To erase the 
-current rectangle, press 'ESC'. When you are satisfied with the image, click 
-'RETURN'. This will close pygame and return the cropped image as opened by PIL.
+This is a GUI implementation of the simple cropping algorithm. Upon clicking 
+and dragging, a rectangle will show. This rectangle can be dragged and resized. 
+To erase the current rectangle, press 'ESC'. When you are satisfied with the 
+image, click 'RETURN'. This will close pygame and return the cropped image as 
+opened by PIL.
 """
 
 import os, sys
@@ -36,7 +37,7 @@ class CropApp:
         self.filename = filename
         with Image.open(filename) as img:
             self.img_arr = np.array(img)
-        self.cropper = [(50, 50), (100, 100)]
+        self.cropper = None
         self.drag = None
         self.drag_corner1 = False
         self.drag_corner2 = False
@@ -73,6 +74,13 @@ class CropApp:
         x1, y1 = top_left
         x2, y2 = bottom_right
         return pygame.Rect(x1, y1, x2-x1, y2-y1)
+    
+    @property
+    def radius(self) -> int:
+        """
+        radius of cropper corner circles
+        """
+        return 6 + min(self.img_arr.shape[:2]) // 200
 
     def draw_window(self) -> None:
         """
@@ -89,19 +97,29 @@ class CropApp:
             # drawing translucent crop rectangle
             crop_rect = pygame.Surface((x2-x1, y2-y1))
             crop_rect.fill((200, 200, 200))
-            crop_rect.set_alpha(150)
+            crop_rect.set_alpha(180)
             self.surface.blit(crop_rect, (x1, y1))
 
             # drawing top-left and bottom-right circles
             for coord in self.cropper:
                 pygame.draw.circle(self.surface, color=(255, 0, 0),
-                                   center=coord, radius=8)
+                                   center=coord, radius=self.radius)
                 pygame.draw.circle(self.surface, color=(0, 0, 0),
-                                   center=coord, radius=8, width=3)
+                                   center=coord, radius=self.radius, width=3)
 
+            # displaying cropped image dimensions
+            font = pygame.font.Font(None, size=40)
+            text = font.render(f"{x2-x1} x {y2-y1}", True, 
+                               (255, 255, 255), (0, 0, 0))
+            text.set_alpha(100)
+            text_rect = text.get_rect()
+            text_rect.bottomleft = (0, self.img_arr.shape[0])
+            self.surface.blit(text, dest=text_rect)
+        
     def create_cropper(self) -> None:
         """
-        Creates 0 x 0 cropper rectangle at the point of click.
+        Creates 1 x 1 cropper rectangle with its bottom-corner at the point of 
+            the click to allow for dragging.
 
         Args:
             click_pos (Tuple[int, int]): Coordinate position of the initial
@@ -210,6 +228,7 @@ class CropApp:
         Returns: nothing
         """
         while True:
+            
             # process pygame events
             events = pygame.event.get()
             for event in events:
@@ -221,6 +240,7 @@ class CropApp:
 
                 elif event.type == pygame.KEYUP:
 
+                    # return cropped image if cropper is activated
                     if event.key == pygame.K_RETURN:
                         if self.cropper:
                             top_left, bottom_right = self.cropper
@@ -230,7 +250,8 @@ class CropApp:
                             new_img.show()
                             pygame.quit()
                             sys.exit()
-
+                    
+                    # delete current cropper
                     elif event.key == pygame.K_ESCAPE:
                         self.cropper = None
 
@@ -241,9 +262,9 @@ class CropApp:
                         self.create_cropper()
 
                     # activate corner dragging
-                    elif self.mouse_distance(self.cropper[0]) <= 8:
+                    elif self.mouse_distance(self.cropper[0]) <= self.radius:
                         self.drag_corner1 = True
-                    elif self.mouse_distance(self.cropper[1]) <= 8:
+                    elif self.mouse_distance(self.cropper[1]) <= self.radius:
                         self.drag_corner2 = True
 
                     # drag rectangle
