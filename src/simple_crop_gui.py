@@ -1,3 +1,4 @@
+MSG = \
 """
 This is a GUI implementation of the simple cropping algorithm. Upon clicking 
 and dragging, a rectangle will show. This rectangle can be dragged and resized. 
@@ -108,13 +109,22 @@ class CropApp:
                                    center=coord, radius=self.radius, width=3)
 
             # displaying cropped image dimensions
-            font = pygame.font.Font(None, size=40)
-            text = font.render(f"{x2-x1} x {y2-y1}", True, 
+            prompt_font = pygame.font.Font(None, size=40)
+            prompt = prompt_font.render(f"{x2-x1} x {y2-y1}", True, 
                                (255, 255, 255), (0, 0, 0))
-            text.set_alpha(100)
-            text_rect = text.get_rect()
-            text_rect.bottomleft = (0, self.img_arr.shape[0])
-            self.surface.blit(text, dest=text_rect)
+            prompt.set_alpha(100)
+            prompt_rect = prompt.get_rect()
+            prompt_rect.bottomleft = (0, self.img_arr.shape[0])
+            self.surface.blit(prompt, dest=prompt_rect)
+
+            # displaying save prompt
+            dim_font = pygame.font.Font(None, size=40)
+            dimensions = dim_font.render("Hit 'RETURN'", True, 
+                               (255, 255, 255), (0, 0, 0))
+            dimensions.set_alpha(100)
+            dimensions_rect = dimensions.get_rect()
+            dimensions_rect.topright = (self.img_arr.shape[1], 0)
+            self.surface.blit(dimensions, dest=dimensions_rect)
         
     def create_cropper(self) -> None:
         """
@@ -301,12 +311,13 @@ class CropApp:
 
 # click commands
 @click.command(name="simple_crop_gui")
-@click.option('-f', '--filename', type=click.Path(exists=True))
+@click.option('-f', '--filename', type=click.Path(exists=True), default="")
 
 def cmd(filename: str) -> None:
     """
     command line operation
     """
+    print(MSG)
     CropApp(filename)
 
 if __name__ == "__main__":
