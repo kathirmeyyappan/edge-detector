@@ -163,8 +163,13 @@ def blur(filename: str, sigma_value: int, progress: bool) -> None:
     """
     command line operation
     """
+    if type(sigma_value) is not int and not 1 <= sigma_value <= 10:
+        raise ValueError("sigma value must be int from 1 to 10")
+    
     with Image.open(filename) as img:
         img_arr = np.array(img)
+        if max(img.arr.shape) > 500:
+            raise ValueError("file too large for gaussian blur to be efficient")
         new_img_arr = gaussian_blur(img_arr, sigma_value, progress)
         new_img = Image.fromarray(new_img_arr)
         new_img.show()
