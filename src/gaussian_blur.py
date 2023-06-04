@@ -29,15 +29,18 @@ def gaussian_blur(img_arr: np.ndarray, sigma: int, msg: bool) -> np.ndarray:
     Returns:
         np.ndarray: Array representation of the blurred image
     """
+    # new image array creation
     new_img_arr = img_arr.copy()
+    # creates kernel with weights according to gaussian distribution
     kernel = get_kernel(sigma)
+    
     for y, row in enumerate(img_arr):
         if msg:
             print(f"{y}/{img_arr.shape[0]} pixel rows calculated")
         for x, _ in enumerate(row):
             # matching image and kernel piece dimensions
             height, width, _ = img_arr.shape
-            img_range = find_range((height, width), (x, y), sigma)
+            img_range = find_range((height, width), (x, y), 3 * sigma)
             x_min, x_max = img_range[0]
             y_min, y_max = img_range[1]
             img_piece = img_arr[y_min:y_max+1, x_min:x_max+1]
@@ -51,7 +54,7 @@ def gaussian_blur(img_arr: np.ndarray, sigma: int, msg: bool) -> np.ndarray:
 
 
 def find_range(dimensions: Tuple[int, int], center: Tuple[int, int],
-                      sigma: int) -> List[Tuple[int, int]]:
+                      radius: int) -> List[Tuple[int, int]]:
     """
     Finds coordinate range for finding the kernel with a given image size and
         pixel coordinate of interest. Accounts for 3 standard deviations.
@@ -59,16 +62,16 @@ def find_range(dimensions: Tuple[int, int], center: Tuple[int, int],
     Args:
         dimensions (Tuple[int, int]): Image dimensions (height x width)
         center (Tuple[int, int]): Coordinate of pixel of interest
-        sigma (int): Standard deviation in guassian distribution. Serves as the
-            strength of the blur for our purposes.
+        radius (int): Distance in each cardinal direction that the kernel would
+            extend into. Tells us how far cropping should go.
 
     Returns:
         List[Tuple[int, int]]: [x-range, y-range]
     """
     y_max, x_max = dimensions
     x, y = center
-    return [(max(0, x - 3 * sigma), min(x_max - 1, x + 3 * sigma)),
-            (max(0, y - 3 * sigma), min(y_max - 1, y + 3 * sigma))]
+    return [(max(0, x - radius), min(x_max - 1, x + radius)),
+            (max(0, y - radius), min(y_max - 1, y + radius))]
 
 
 def get_kernel(sigma: int) -> np.ndarray:
@@ -168,7 +171,7 @@ def blur(filename: str, sigma_value: int, progress: bool) -> None:
     
     with Image.open(filename) as img:
         img_arr = np.array(img)
-        if max(img.arr.shape) > 500:
+        if max(img_arr.shape) > 500:
             raise ValueError("file too large for gaussian blur to be efficient")
         new_img_arr = gaussian_blur(img_arr, sigma_value, progress)
         new_img = Image.fromarray(new_img_arr)
