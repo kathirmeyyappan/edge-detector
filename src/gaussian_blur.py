@@ -9,7 +9,7 @@ Note that this file uses click for command line support. You can run it from
 the root with: 'python3 src/filename.py --help' to get started.
 """
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import numpy as np
 from PIL import Image
 import click
@@ -38,16 +38,27 @@ def gaussian_blur(img_arr: np.ndarray, sigma: int, msg: bool) -> np.ndarray:
         if msg:
             print(f"{y}/{img_arr.shape[0]} pixel rows calculated")
         for x, _ in enumerate(row):
-            # matching image and kernel piece dimensions
+            
+            # getting image_piece dimensions
             height, width, _ = img_arr.shape
             img_range = find_range((height, width), (x, y), 3 * sigma)
             x_min, x_max = img_range[0]
             y_min, y_max = img_range[1]
-            img_piece = img_arr[y_min:y_max+1, x_min:x_max+1]
-            kernel_piece = get_kernel_piece(kernel, img_range)
+            img_piece = img_arr[y_min:y_max, x_min:x_max]
+            
+            # cropping kernel to match image_piece
+            x_bounds, y_bounds = crop_kernel(kernel, img_range)
+            x_min, x_max = x_bounds
+            y_min, y_max = y_bounds
+            kernel_piece = kernel[y_min:y_max, x_min:x_max]
+            
+            # normalizing kernel values so that total sum is 3.00 
+            # (1.00 for each RGB)
+            kernel_piece = kernel_piece / np.sum(kernel_piece) * 3
             
             # putting blurred pixel into new image array
             new_img_arr[y, x] = pixel_calculate(kernel_piece, img_piece)
+    
     if msg: 
         print("done!")
     return new_img_arr
@@ -57,7 +68,7 @@ def find_range(dimensions: Tuple[int, int], center: Tuple[int, int],
                       radius: int) -> List[Tuple[int, int]]:
     """
     Finds coordinate range for finding the kernel with a given image size and
-        pixel coordinate of interest. Accounts for 3 standard deviations.
+        pixel coordinate of interest. 
 
     Args:
         dimensions (Tuple[int, int]): Image dimensions (height x width)
@@ -70,8 +81,13 @@ def find_range(dimensions: Tuple[int, int], center: Tuple[int, int],
     """
     y_max, x_max = dimensions
     x, y = center
-    return [(max(0, x - radius), min(x_max - 1, x + radius)),
-            (max(0, y - radius), min(y_max - 1, y + radius))]
+    
+    x_min = 0 if x - radius < 0 else x - radius
+    x_max = x_max - 1 if x + radius > x_max - 1 else x + radius
+    y_min = 0 if y - radius < 0 else y - radius
+    y_max = y_max - 1 if y + radius > y_max - 1 else y + radius   
+     
+    return [(x_min, x_max + 1), (y_min, y_max + 1)]
 
 
 def get_kernel(sigma: int) -> np.ndarray:
@@ -98,8 +114,8 @@ def get_kernel(sigma: int) -> np.ndarray:
     return kernel
 
 
-def get_kernel_piece(kernel: np.ndarray,
-                     img_range: List[Tuple[int, int]]) -> np.ndarray:
+def crop_kernel(kernel: np.ndarray, img_range: List[Tuple[int, int]]
+                ) -> List[Tuple[Optional[int], Optional[int]]]:
     """
     Normalizes and crops kernel based on respective pixel position so that its
         dimensions match with the image piece for hadamard product.
@@ -109,30 +125,28 @@ def get_kernel_piece(kernel: np.ndarray,
         img_range (List[Tuple[int, int]]): Coordinate ranges to apply crop.
 
     Returns:
-        np.ndarray: Cropped kernel with weighted values summing to 3.00 (which
-            guarantees that each RGB will be weighted properly to 1.00). Will be
-            used for convolution.
+        np.ndarray: Coordinate ranges within the kernel to apply crop in 
+            order to get kernel_piece
     """
     x_min, x_max = img_range[0]
     y_min, y_max = img_range[1]
-    kernel_piece = kernel.copy()
+    new_x_min = new_x_max = new_y_min = new_y_max = None
 
     # vertical cropping
-    if y_max - y_min + 1 < kernel.shape[0]:
+    if y_max - y_min < kernel.shape[0]:
         if y_min == 0:
-            kernel_piece = kernel_piece[kernel.shape[0] - (y_max - y_min + 1):]
+            new_y_min, new_y_max = kernel.shape[0] - (y_max - y_min), None
         else:
-            kernel_piece = kernel_piece[:y_max - y_min + 1]
+            new_y_min, new_y_max = None, y_max - y_min
 
     # horizontal cropping
-    if x_max - x_min + 1 < kernel.shape[1]:
+    if x_max - x_min < kernel.shape[1]:
         if x_min == 0:
-            kernel_piece = kernel_piece[:, kernel.shape[1] - (x_max - x_min + 1):]
+            new_x_min, new_x_max = kernel.shape[1] - (x_max - x_min), None
         else:
-            kernel_piece = kernel_piece[:, :x_max - x_min + 1]
+            new_x_min, new_x_max = None, x_max - x_min
 
-    # normalizing kernel values so that total sum is 3.00 (1.00 for each RGB)
-    return kernel_piece / np.sum(kernel_piece) * 3
+    return [(new_x_min, new_x_max), (new_y_min, new_y_max)]    
 
 
 def pixel_calculate(kernel: np.ndarray, og_img: np.ndarray) -> np.ndarray:
@@ -172,7 +186,9 @@ def blur(filename: str, sigma_value: int, progress: bool) -> None:
     with Image.open(filename) as img:
         img_arr = np.array(img)
         if max(img_arr.shape) > 500:
-            raise ValueError("file too large for gaussian blur to be efficient")
+            raise ValueError("Image is too large for gaussian blur to be "
+                             "efficient. Try another image file or another "
+                             "algorithm like box blur")
         new_img_arr = gaussian_blur(img_arr, sigma_value, progress)
         new_img = Image.fromarray(new_img_arr)
         new_img.show()
