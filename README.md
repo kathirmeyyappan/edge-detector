@@ -46,7 +46,7 @@ Below is an example of running (from the root) ```python3 src/box_blur.py -f ima
   <img src="https://i.imgur.com/WquQVC4.png" alt="Box Blur Demonstration"></img>
 </p>
 
-As can be seen above, even though the blur factors are similar, many details are lost in this blur method. So though it is less computationally expensive, it retains much less detail.
+As can be seen above, even though the blur factors are similar, many details are lost in this blur method compared to Gaussian blur. So though it is less computationally expensive, it retains much less detail.
 
 ## Median Blur
 Median blur is very similar to box blur in that it does a very simple operation over a certain range surrounding the pixel of interest to calculate its new value. The difference is that it will take a median for each of the R, G, and B values over the given range rather than their mean. As such, my implementation, which is in [median_blur.py](src/median_blur.py), is very similar to [box_blur.py](src/box_blur.py) save for the calculation of the pixel RGB value (which is a median instead of a mean). To run this file, run this from the root: ```python3 src/median_blur.py -f [FILEPATH] -r [RADIUS]```, where the filepath is from the root (e.g. ```images/luffy.py```) and radius corresponds to the range from which we take the median.
