@@ -1,5 +1,7 @@
 """
-
+This image uses simple linear interpolation to resize images. Essentially, 
+the new image's pixel(s) will be the same value as the (coordinate-wise) 
+corresponding pixel on the original image.
 """
 
 from typing import List, Tuple, Optional
