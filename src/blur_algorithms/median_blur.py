@@ -18,7 +18,7 @@ def median_blur(img_arr: np.ndarray, radius: int, msg: bool) -> np.ndarray:
 
     Args:
         img_arr (np.ndarray): 3-d array representation of image
-        radius (int): radius of kern
+        radius (int): radius of kernel
         msg (bool): Option to display a progress message every time a row is 
             completed
 
