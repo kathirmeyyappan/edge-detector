@@ -21,7 +21,7 @@ This works because when stretching out to infinity, the integral under a Guassia
 
 The kernel is then normalized so the sum of its elements is 1.00 per color and convolved (using the Hadamard product) with the matrix containing the corresponding pixel and its surroundings. This value is stored in the pixel's corresponding spot in the new image. The values are then summed up per color in the RGB 1 x 3 matrix, which finally yields the value for one pixel. This processes is repeated on every pixel of the image. To read more about Gaussian blur, see [here](https://en.wikipedia.org/wiki/Gaussian_blur). 
 
-My implementation of the Gaussian blur algorithm is in [gaussian_blur.py](src/blur_algorithms/gaussian_blur.py). To run this file, run this from the root: ```python3 src/resize_algorithms/simple_crop_gui.py -f [FILEPATH] -s [SIGMA_VALUE]```, where the filepath is from the root (e.g. ```images/luffy.py```) and sigma is the strength (typically an integer between 1 and 10 inclusive for reasonable results). 
+My implementation of the Gaussian blur algorithm is in [gaussian_blur.py](src/blur_algorithms/gaussian_blur.py). To run this file, run this from the root: ```python3 src/blur_algorithms/gaussian_blur.py -f [FILEPATH] -s [SIGMA_VALUE]```, where the filepath is from the root (e.g. ```images/luffy.py```) and sigma is the strength (typically an integer between 1 and 10 inclusive for reasonable results). 
 
 Larger files and sigma values take significantly longer beause of the computationally expensive nature of running Gaussian blur from scratch. Surely, PIL and other image handling libraries utilize advanced optimization techniques. As these implementations are for my own educational purposes and are meant to be semantically understandable, I will leave things as are. Below is an example of running (from the root) ```python3 src/blur_algorithms/gaussian_blur.py -f images/luffy.jpg -s SIGMA``` for ```SIGMA``` ∈ [1, 2, 3, 4] along with the original image (i.e. ```SIGMA``` = 0).
 
@@ -74,7 +74,7 @@ It should also be noted that due to our calculation of median not requiring a mo
 ## Simple Crop
 Using matrices in R^n, it is quite easy to cut out a 'rectangle' using indices. For image cropping, we take the array representation of the image and simply index it as ```img_arr[row_start : row_end + 1, col_start : col_end + 1]```. The implementation for this is in the simple_crop function from [simple_crop.py](src/resize_algorithms/simple_crop.py).
 
-In [simple_crop_gui.py](src/resize_algorithms/simple_crop_gui.py), I have made a simple graphical user interface for cropping in pygame. To run the file, run this from the root: ```python3 src/simple_crop_gui.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). For more info on it, try ```python3 src/resize_algorithms/simple_crop_gui.py --help```. Below is an example use of the GUI.
+In [simple_crop_gui.py](src/resize_algorithms/simple_crop_gui.py), I have made a simple graphical user interface for cropping in pygame. To run the file, run this from the root: ```python3 src/resize_algorithms/simple_crop_gui.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). For more info on it, try ```python3 src/resize_algorithms/simple_crop_gui.py --help```. Below is an example use of the GUI.
 
 <p align="center">
   <img src="https://imgur.com/p6SUhVk.gif" alt="Simple Crop Gui Demonstration">
