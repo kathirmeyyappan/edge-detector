@@ -1,2 +1,3 @@
 venv
-src/__pycache__/
+src/blur_algorithms/__pycache__
+src/resize_algorithms/__pycache__
