@@ -35,6 +35,11 @@ Below is an example of running (from the root) ```python3 src/box_blur.py -f ima
 
 As can be seen above, even though the blur factors are similar, many details are lost in this blur method. So though it is less computationally expensive, it retains much less detail.
 
+## Median Blur
+Median blur is very simple to box blur in that it does a very simple operation over a certain range surrounding the pixel of interest to calculate its new value. The difference is that it will take a median for each of the R, G, and B values over the given range rather than their mean. As such, my implementation, which is in [median_blur.py](src/median_blur.py), is very similar to [box_blur.py](src/box_blur.py) save for the calculation of the pixel RGB value (which is a median instead of a mean).
+
+Because we are taking a median, severe outliers do not at all contribute to the image.
+
 ## Simple Crop
 Using matrices in R^n, it is quite easy to cut out a 'rectangle' using indices. For image cropping, we take the array representation of the image and simply index it as ```img_arr[row_start : row_end + 1, col_start : col_end + 1]```. The implementation for this is in the simple_crop function from [simple_crop.py](src/simple_crop.py).
 
