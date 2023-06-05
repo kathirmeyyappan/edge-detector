@@ -66,7 +66,7 @@ As can be seen above, there is actually a quite remarkable amount of noise corre
 We can compare this to other blur algorithms to show its supremacy in removing noise. Below (from top to bottom) are the median blur, Gaussian blur, and box blur algorithms with ```RADIUS``` (```SIGMA``` for Gaussian blur) values of 0, 1, 2, and 3. As can be seen, median blur completely eliminates noise almost immediately, though edge clarity is lost. Still, even with ```RADIUS``` = 1, median blur outperforms the other algorithms greatly.
 
 <p align="center">
-  <img src="https://i.imgur.com/whuPKKP.png" alt="Noisy Luffy Blur Demonstration" width="734" height="650">
+  <img src="https://i.imgur.com/TNq0KZq.png" alt="Noisy Luffy Blur Demonstration" width="734" height="650">
 </p>
 
 It should also be noted that due to our calculation of median not requiring a moving window of any sort, this algorithm is very fast when compared with Gaussian blur, for instance.
