@@ -90,7 +90,7 @@ In [simple_crop_gui.py](src/resize_algorithms/simple_crop_gui.py), I have made a
 ## Nearest Neighbor Interpolation
 A common and fast method for image resizing lies in nearest neighbor interpolation. This method resizes the new image according to a scale, and maps the pixel value to its (linearly) corresponding position on each axis to the original image. Through this, the image scales linearly. Some details are lost when the scale is less than 1.00, and scaling up in size causes blocks and streaks to occur due to there being no upscaling correction. My implementation of this method is in [nearest_neighbor_interpolation.py](src/resize_algorithms/nearest_neighbor_interpolation.py).
 
-To run this file, run this from the root: ```python3 src/resize_algorithms/nearest_neighbor_interpolation.py -f [FILEPATH] -s [RESIZE FACTOR]```, where the filepath is from the root (e.g. ```images/luffy.py```) and the resize factor is a float greater than zero corresponding to scale. Shown below (from left to right) is this algorithm run with resizing factors of 0.5, 1, and 2.
+To run this file, run this from the root: ```python3 src/resize_algorithms/nearest_neighbor_interpolation.py -f [FILEPATH] -s [RESIZE FACTOR]```, where the filepath is from the root (e.g. ```images/luffy.py```) and the resize factor is a float greater than zero corresponding to scale. Shown below (from left to right) is this algorithm run with resizing factors of 0.5, 1, and 2 on [freedom.jpg](images/freedom.jpg).
 
 <p align="center">
   <img src="https://i.imgur.com/YUUqCWZ.png" alt="Nearest Neighbor Interpolation Demonstration">
