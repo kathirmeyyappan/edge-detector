@@ -2,13 +2,20 @@
 This is a collection of some simple image processing algorithms, imlpemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
 
 ## Table of Contents
- - [Gaussian Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#gaussian-blur)
 
- - [Box Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-blur)
+#### Blur Algorithms
 
- - [Median Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#median-blur)
+  - [Gaussian Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#gaussian-blur)
 
- - [Simple Crop](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#simple-crop)
+  - [Box Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-blur)
+
+  - [Median Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#median-blur)
+
+#### Cropping and Resizing Algorithms
+
+  - [Simple Crop](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#simple-crop)
+
+  - [Nearest Neighbor Interpolation](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#nearest-neighbor-interpolation)
 
 ## Gaussian Blur
 Gaussian blur is a blur algorithm which maintains detail well due to assigning weights based on distance from the original pixel. It makes use of the Gaussian function (also known as 'normal distribution' and 'bell curve') to assign weights when blurring per-pixel. When looking at how to convolve a pixel's surrounds to its own new value, we look to the Gaussian function, centered around this pixel in 2 dimensions, to assign weights for how each of the surrounding pixels will contribute to the center pixel's new RGB values. 
@@ -30,7 +37,7 @@ Larger files and sigma values take significantly longer beause of the computatio
 </p>
 
 ## Box Blur
-Box blur is the most simple blur algorithm. It takes the average RGB values of all pixels within a given distance of the target pixel. Because it uses a simple average, it is quite easy to implement iteratively, where we just take the arithmetic mean of all the pixels in the needed range. This implementation is in [box_blur.py](src/blur_algorithms/box_blur.py). To run this file, run this from the root: ```python3 src/blur_algorithms/box_blur.py -f [FILEPATH] -r [RADIUS]```, where the filepath is from the root (e.g. ```images/luffy.py```) and and radius corresponds to the range from which we take the mean.
+Box blur is the most simple blur algorithm. It takes the average RGB values of all pixels within a given distance of the target pixel. Because it uses a simple average, it is quite easy to implement iteratively, where we just take the arithmetic mean of all the pixels in the needed range. This implementation is in [box_blur.py](src/blur_algorithms/box_blur.py). To run this file, run this from the root: ```python3 src/blur_algorithms/box_blur.py -f [FILEPATH] -r [RADIUS]```, where the filepath is from the root (e.g. ```images/luffy.py```) and radius corresponds to the range from which we take the mean.
 
 Alternatively, we can use a moving window identically to the Gaussian Blur algorithm where our kernel matrix consists of uniform values to represent identical weights in a "weighted" average. To learn more about box blur, see [here](https://en.wikipedia.org/wiki/Box_blur). A moving window kernel where our given radius is 1 is shown below:
 
@@ -78,4 +85,13 @@ In [simple_crop_gui.py](src/resize_algorithms/simple_crop_gui.py), I have made a
 
 <p align="center">
   <img src="https://imgur.com/p6SUhVk.gif" alt="Simple Crop Gui Demonstration">
+</p>
+
+## Nearest Neighbor Interpolation
+A common and fast method for image resizing lies in nearest neighbor interpolation. This method resizes the new image according to a scale, and maps the pixel value to its (linearly) corresponding position on each axis to the original image. Through this, the image scales linearly. Some details are lost when the scale is less than 1.00, and scaling up causes blocks and streaks to occur due to there being no upscaling. My implementation of this method is in [nearest_neighbor_interpolation.py](src/resize_algorithms/nearest_neighbor_interpolation.py).
+
+To run this file, run this from the root: ```python3 src/resize_algorithms/nearest_neighbor_interpolation.py -f [FILEPATH] -s [RESIZE FACTOR]```, where the filepath is from the root (e.g. ```images/luffy.py```) and the resize factor is a float greater than zero corresponding to scale. Shown below (from left to right) is this algorithm run with resizing factors of 0.5, 1, and 2.
+
+<p align="center">
+  <img src="https://i.imgur.com/YUUqCWZ.png" alt="Nearest Neighbor Interpolation Demonstration">
 </p>
