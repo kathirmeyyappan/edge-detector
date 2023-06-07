@@ -54,7 +54,6 @@ def resize(filename: str, resize_factor: float) -> None:
     with Image.open(filename) as img:
         img_arr = np.array(img)
         new_img_arr = nearest_neighbor_interpolation(img_arr, resize_factor)
-        print(type(new_img_arr), new_img_arr.shape)
         new_img = Image.fromarray(new_img_arr)
         new_img.show()
 
