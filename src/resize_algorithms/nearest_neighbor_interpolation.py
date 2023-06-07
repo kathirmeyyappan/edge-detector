@@ -10,7 +10,8 @@ from PIL import Image
 import click
 
 
-def nearest_neighbor_interpolation(img_arr: np.ndarray, resize_factor: float) -> np.ndarray:
+def nearest_neighbor_interpolation(img_arr: np.ndarray, 
+                                   resize_factor: float) -> np.ndarray:
     """
     Resizes an array representation of an image by mapping a scaled array's RGB
         values to their corresponding places on the original array.
