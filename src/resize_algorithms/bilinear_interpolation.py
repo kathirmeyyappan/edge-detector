@@ -82,7 +82,7 @@ def vertical_linear_interpolation(img_arr: np.ndarray, lattice_points: List[int]
     h = img_arr.shape[0]
     index = 0
     for y, row in enumerate(img_arr):
-        print(f"{y}/{h - 1} pixel-lines calculated along {orientation} axis")
+        print(f"{y}/{h} pixel-lines calculated along {orientation} axis")
         # bottom edge of image
         if y == h - 1:
             break
@@ -98,7 +98,7 @@ def vertical_linear_interpolation(img_arr: np.ndarray, lattice_points: List[int]
             #assigning weighted average RGB value to position
             img_arr[y, x] = img_arr[top, x] * top_weight + \
             img_arr[bottom, x] * bottom_weight
-
+    print("done!")
 
 # click commands
 @click.command(name="nearest_neighbor_interpolation")
