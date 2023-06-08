@@ -17,6 +17,8 @@ This is a collection of some simple image processing algorithms, imlpemented fro
 
   - [Nearest Neighbor Interpolation](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#nearest-neighbor-interpolation)
 
+  - [Bilinear Interpolation](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#bilinear-interpolation)
+
 ## Gaussian Blur
 Gaussian blur is a blur algorithm which maintains detail well due to assigning weights based on distance from the original pixel. It makes use of the Gaussian function (also known as 'normal distribution' and 'bell curve') to assign weights when blurring per-pixel. When looking at how to convolve a pixel's surrounds to its own new value, we look to the Gaussian function, centered around this pixel in 2 dimensions, to assign weights for how each of the surrounding pixels will contribute to the center pixel's new RGB values. 
 
@@ -95,3 +97,16 @@ To run this file, run this from the root: ```python3 src/resize_algorithms/neare
 <p align="center">
   <img src="https://i.imgur.com/YUUqCWZ.png" alt="Nearest Neighbor Interpolation Demonstration">
 </p>
+
+## Bilinear Interpolation
+The blocky upscaling of nearest neighbor interpolation leaves much to be desired when we upscale to larger sizes. The pixelated nature of the originally smaller image becomes very apparent, after all. To mitigate this effect, we can use bilinear interpolation. This resizing method essentially eliminates apparent blockiness by linearly interpolating for each pixel that corresponds to a point in between discrete RGB values from the original image. Mathematically, this idea is actually quite difficult to explain without diagrams and many redundant equations. See [here](https://en.wikipedia.org/wiki/Bilinear_interpolation) for more about bilinear interpolation.
+
+My implementation of this algorithm can be found at [bilinear_interpolation.py](src/resize_algorithms/bilinear_interpolation.py). As the first paragraph of the wikipedia link describes, I linearly interpolated with weighted averages one axis at a time, using NumPy's rotation method to increase the efficiency of the implementation.
+
+Now, let us see what kind of differences that bilinear interpolation provides to image resizing. Below, we have two images, both of which are the results of running resizing algorithms (with x5 resizing) on [eren.jpg](images/eren.jpg). To the left, we have the nearest neighbor interpolation result (run ```python3 src/resize_algorithms/nearest_neighbor_interpolation.py -f images/eren.jpg -s 5``` from root). To the right is the bilinear interpolation result (run ```python3 src/resize_algorithms/bilinear_interpolation.py -f images/eren.jpg -s 5``` from root).
+
+<p align="center">
+  <img src="https://i.imgur.com/wkrzKI1.png" alt="Bilinear Interpolation Demonstration">
+</p>
+
+As can be seen above, there is clearly some filled in smoothness when comparing the right image to the left. This is a result of bilinear interpolation mitigating most of the jarring transition that would occur between pixel changes.
