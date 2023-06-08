@@ -46,6 +46,7 @@ def box_sampling(img_arr: np.ndarray, resize_factor: float) -> np.ndarray:
     for y in range(new_h):
         y_low = y_lattice_points[y]
         y_high = None if y == new_h - 1 else y_lattice_points[y + 1]
+        print(f"{y}/{new_h} rows calculated")
         
         for x in range(new_w):
             x_low = x_lattice_points[x]
@@ -56,6 +57,7 @@ def box_sampling(img_arr: np.ndarray, resize_factor: float) -> np.ndarray:
                                     (-1, 3))
             new_img_arr[y, x] = np.average(rgb_values, axis=0)
     
+    print("done!")
     return new_img_arr
 
 
