@@ -19,6 +19,8 @@ This is a collection of some simple image processing algorithms, imlpemented fro
 
   - [Bilinear Interpolation](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#bilinear-interpolation)
 
+  - [Box Sampling](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-sampling)
+
 ## Gaussian Blur
 Gaussian blur is a blur algorithm which maintains detail well due to assigning weights based on distance from the original pixel. It makes use of the Gaussian function (also known as 'normal distribution' and 'bell curve') to assign weights when blurring per-pixel. When looking at how to convolve a pixel's surrounds to its own new value, we look to the Gaussian function, centered around this pixel in 2 dimensions, to assign weights for how each of the surrounding pixels will contribute to the center pixel's new RGB values. 
 
@@ -83,7 +85,7 @@ It should also be noted that due to our calculation of median not requiring a mo
 ## Simple Crop
 Using matrices in R^n, it is quite easy to cut out a 'rectangle' using indices. For image cropping, we take the array representation of the image and simply index it as ```img_arr[row_start : row_end + 1, col_start : col_end + 1]```. The implementation for this is in the simple_crop function from [simple_crop.py](src/resize_algorithms/simple_crop.py).
 
-In [simple_crop_gui.py](src/resize_algorithms/simple_crop_gui.py), I have made a simple graphical user interface for cropping in pygame. To run the file, run this from the root: ```python3 src/resize_algorithms/simple_crop_gui.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). For more info on it, try ```python3 src/resize_algorithms/simple_crop_gui.py --help```. Below is an example use of the GUI.
+In [simple_crop_gui.py](src/resize_algorithms/simple_crop_gui.py), I have made a simple graphical user interface for cropping in pygame. To run the file, run this from the root: ```python3 src/resize_algorithms/simple_crop_gui.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). Below is an example use of the GUI.
 
 <p align="center">
   <img src="https://imgur.com/p6SUhVk.gif" alt="Simple Crop Gui Demonstration">
@@ -101,7 +103,7 @@ To run this file, run this from the root: ```python3 src/resize_algorithms/neare
 ## Bilinear Interpolation
 The blocky upscaling of nearest neighbor interpolation leaves much to be desired when we upscale to larger sizes. The pixelated nature of the originally smaller image becomes very apparent, after all. To mitigate this effect, we can use bilinear interpolation. This resizing method essentially eliminates apparent blockiness by linearly interpolating for each pixel that corresponds to a point in between discrete RGB values from the original image. Mathematically, this idea is actually quite difficult to explain without diagrams and many redundant equations. See [here](https://en.wikipedia.org/wiki/Bilinear_interpolation) for more about bilinear interpolation.
 
-My implementation of this algorithm can be found at [bilinear_interpolation.py](src/resize_algorithms/bilinear_interpolation.py). As the first paragraph of the wikipedia link describes, I linearly interpolated with weighted averages one axis at a time, using NumPy's rotation method to increase the efficiency of the implementation. To run this file yourself, try ```python3 src/resize_algorithms/bilinear_interpolation.py --help``` to get started.
+My implementation of this algorithm can be found in [bilinear_interpolation.py](src/resize_algorithms/bilinear_interpolation.py). As the first paragraph of the wikipedia link describes, I linearly interpolated with weighted averages one axis at a time, using NumPy's rotation method to increase the efficiency of the implementation. To run this file, run this from the root: ```python3 src/resize_algorithms/bilinear_interpolation.py -f [FILEPATH] -s [RESIZE FACTOR]```, where the filepath is from the root (e.g. ```images/luffy.py```) and the resize factor is a float greater than 1.
 
 Now, let us see what kind of differences that bilinear interpolation provides to image resizing. Below, we have two images, both of which are the results of running resizing algorithms (with x5 resizing) on [eren.jpg](images/eren.jpg). To the left, we have the nearest neighbor interpolation result (run ```python3 src/resize_algorithms/nearest_neighbor_interpolation.py -f images/eren.jpg -s 5``` from root). To the right is the bilinear interpolation result (run ```python3 src/resize_algorithms/bilinear_interpolation.py -f images/eren.jpg -s 5``` from root).
 
@@ -110,3 +112,22 @@ Now, let us see what kind of differences that bilinear interpolation provides to
 </p>
 
 As can be seen above, there is clearly some filled in smoothness when comparing the right image to the left. This is a result of bilinear interpolation mitigating most of the jarring transition that would occur between pixel changes.
+
+## Box Sampling
+When we use nearest neighbor interpolation to reduce the size of an an image, we are essentially picking (roughly) equidistant lattice points from the original image to map onto the new image. Because the input to the downsized image only consists of said lattice points, we lose more information the smaller our resizing factor is (by virtue of there being less lattice points), giving rise to aliasing. For example, below is [forgers.jpg](images/forgers.jpg) with a 0.2 resize scale (run ```python3 src/resize_algorithms/nearest_neighbor_interpolation.py -f images/forgers.jpg -s 0.2``` from root). Notice how the image lacks some details and feels "grainy".
+
+<p align="center">
+  <img src="https://i.imgur.com/Y3oKssf.png", alt="Forgers Downsized x0.2 with Nearest Neigbor Interpolation">
+</p>
+
+A solution to this is box sampling. We use all of the lattice points to create a grid of boxes (each one being a rectangular section of pixels from the original image) from which we take average RGB values. With each box corresponding to a pixel in the downsized image, we assign said pixel the average RGB value of the box. With this method, all of the pixels in the original image contribute to the downsized image, effectively introducing a downscale that drastically decreases lost info. 
+
+My implementation of this algorithm can be found in [box_sampling.py](src/resize_algorithms/box_sampling.py). To run this file, run this from the root: ```python3 src/resize_algorithms/box_sampling.py -f [FILEPATH] -s [RESIZE FACTOR]```, where the filepath is from the root (e.g. ```images/luffy.py```) and the resize factor is a non-zero, positive float less than 1.
+
+Below we have two images. On the left is [gintama.jpg](images/gintama.jpg) run through [nearest_neighbor_interpolation.py](src/resize_algorithms/nearest_neighbor_interpolation.py) with a resize factor of 0.25. On the right is the same image run through [box_sampling.py](src/resize_algorithms/box_sampling.py) with the same resize factor of 0.25.
+
+<p align="center">
+  <img src="https://i.imgur.com/gy4nTYn.png", alt="Box Sampling Demonstration">
+</p>
+
+As can be seen, the right image (box sampling) retains much more detail and smoothness by taking all of the original image's pixels into account as opposed to the left one (nearest neighbor interpolation).
