@@ -100,6 +100,7 @@ def vertical_linear_interpolation(img_arr: np.ndarray, lattice_points: List[int]
             img_arr[bottom, x] * bottom_weight
     print("done!")
 
+
 # click commands
 @click.command(name="nearest_neighbor_interpolation")
 @click.option('-f', '--filename', type=click.Path(exists=True))
