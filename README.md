@@ -120,7 +120,11 @@ When we use nearest neighbor interpolation to reduce the size of an an image, we
   <img src="https://i.imgur.com/duw8OyF.png", alt="Forgers Downsized x0.2 with Nearest Neigbor Interpolation">
 </p>
 
-A solution to this is box sampling. We use all of the lattice points to create a grid of boxes (each one being a rectangular section of pixels from the original image) from which we take average RGB values. With each box corresponding to a pixel in the downsized image, we assign said pixel the average RGB value of the box. With this method, all of the pixels in the original image contribute to the downsized image, effectively introducing a downscale that drastically decreases lost info. 
+A solution to this is box sampling. We use all of the lattice points to create a grid of boxes (each one being a rectangular section of pixels from the original image) from which we take average RGB values. With each box corresponding to a pixel in the downsized image, we assign said pixel the average RGB value of the box. With this method, all of the pixels in the original image contribute to the downsized image, effectively introducing a downscale that drastically decreases lost info. Box sampling makes a large difference, as can be seen in its application to the same image (right) below.
+
+<p align="center">
+  <img src="https://i.imgur.com/j34o5D9.png", alt="Forgers Box Sampling">
+</p>
 
 My implementation of this algorithm can be found in [box_sampling.py](src/resize_algorithms/box_sampling.py). To run this file, run this from the root: ```python3 src/resize_algorithms/box_sampling.py -f [FILEPATH] -s [RESIZE FACTOR]```, where the filepath is from the root (e.g. ```images/luffy.py```) and the resize factor is a non-zero, positive float less than 1.
 
