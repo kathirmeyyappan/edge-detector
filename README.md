@@ -117,7 +117,7 @@ As can be seen above, there is clearly some filled in smoothness when comparing 
 When we use nearest neighbor interpolation to reduce the size of an an image, we are essentially picking (roughly) equidistant lattice points from the original image to map onto the new image. Because the input to the downsized image only consists of said lattice points, we lose more information the smaller our resizing factor is (by virtue of there being less lattice points), giving rise to aliasing. For example, below is [forgers.jpg](images/forgers.jpg) with a 0.2 resize scale (run ```python3 src/resize_algorithms/nearest_neighbor_interpolation.py -f images/forgers.jpg -s 0.2``` from root). Notice how the image lacks some details and feels "grainy".
 
 <p align="center">
-  <img src="https://i.imgur.com/Y3oKssf.png", alt="Forgers Downsized x0.2 with Nearest Neigbor Interpolation">
+  <img src="https://i.imgur.com/duw8OyF.png", alt="Forgers Downsized x0.2 with Nearest Neigbor Interpolation">
 </p>
 
 A solution to this is box sampling. We use all of the lattice points to create a grid of boxes (each one being a rectangular section of pixels from the original image) from which we take average RGB values. With each box corresponding to a pixel in the downsized image, we assign said pixel the average RGB value of the box. With this method, all of the pixels in the original image contribute to the downsized image, effectively introducing a downscale that drastically decreases lost info. 
