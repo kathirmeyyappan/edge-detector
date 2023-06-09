@@ -21,7 +21,7 @@ def nearest_neighbor_interpolation(img_arr: np.ndarray,
         resize_factor (float): Factor by which image is to be resized
 
     Returns:
-        np.ndarray: Array representation of the blurred image
+        np.ndarray: Array representation of the resized image
     """
     h, w, _ = img_arr.shape
     
