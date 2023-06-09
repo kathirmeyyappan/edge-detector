@@ -21,6 +21,12 @@ This is a collection of some simple image processing algorithms, imlpemented fro
 
   - [Box Sampling](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-sampling)
 
+#### Other Algorithms
+
+  - [Greyscale](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#greyscale)
+
+  - [Brightness](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#brightness)
+
 ## Gaussian Blur
 Gaussian blur is a blur algorithm which maintains detail well due to assigning weights based on distance from the original pixel. It makes use of the Gaussian function (also known as 'normal distribution' and 'bell curve') to assign weights when blurring per-pixel. When looking at how to convolve a pixel's surrounds to its own new value, we look to the Gaussian function, centered around this pixel in 2 dimensions, to assign weights for how each of the surrounding pixels will contribute to the center pixel's new RGB values. 
 
@@ -135,3 +141,21 @@ Below we have two images. On the left is [gintama.jpg](images/gintama.jpg) run t
 </p>
 
 As can be seen, the right image (box sampling) retains much more detail and smoothness by taking all of the original image's pixels into account as opposed to the left one (nearest neighbor interpolation).
+
+## Greyscale
+To greyscale an image, we take a given pixel and set all of its RGB values to their cumulative average. As such, a pixel, ```< R, G, B >``` would become ```< (R + G + B) / 3, (R + G + B) / 3, (R + G + B) / 3 >```. 
+
+My implementation of this algorithm can be found in [greyscale.py](src/other_algorithms/greyscale.py). To run this file, run this from the root: ```python3 src/src/other_algorithms/greyscale.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). Below is an example of this algorithm run on [nichijou.jpg](images/nichijou.jpg).
+
+<p align="center">
+  <img src="https://i.imgur.com/0EefuAx.png" alt="Greyscale Demonstration">
+</p>
+
+## Brightness
+Brightness can also be applied very simply. All we need to do is increase all of the RGB values in a given pixel by a constant, capping off the values at 255 above (i.e. if the value exceeds 255, set it at 255) and 0 below. By introducing a brightness constant $b$, which ranges from -1 to 1, as the portion of 255 by which to add/subtract to each RGB value. So, iterating through each pixel's RGB values, we apply: $C = C_0 + b * 255$, then correct for values above 255 and below 0.
+
+My implementation of this algorithm can be found in [brightness.py](src/other_algorithms/brightness.py). To run this file, run this from the root: ```python3 src/src/other_algorithms/brightness.py -f [FILEPATH] -b [BRIGHTNESS FACTOR]```, where the filepath is from the root (e.g. ```images/luffy.py```) and the brightness factor is a float between -1 and 1 (negative values to darken and positive values to brighten). Below is an example of this algorithm run on [saitama.jpg](images/saitama.jpg), with brightness factors of -0.5, -0.25, 0, 0.25, and 0.5 (from left to right).
+
+<p align="center">
+  <img src="https://i.imgur.com/0EefuAx.png" alt="Brightness Demonstration">
+</p>
