@@ -29,6 +29,8 @@ def brighten(img_arr: np.ndarray, brightness_factor: float) -> np.ndarray:
             # increasing brightness
             new_pixel = pixel + 255 * brightness_factor
             for i, rgb_val in enumerate(new_pixel):
+                if rgb_val < 0:
+                    new_pixel[i] = 0
                 if rgb_val > 255:
                     new_pixel[i] = 255
             
