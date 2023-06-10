@@ -4,31 +4,31 @@ This is a collection image processing algorithms, implemented from scratch in py
 ## Table of Contents
 
 ### Edge Detection
-  - #### [Canny Edge Detection](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#canny-edge-detection)
+  - #### [Canny Edge Detection](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#canny-edge-detection-1)
 
 ### Blur Algorithms
 
-  - #### [Gaussian Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#gaussian-blur)
+  - #### [Gaussian Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#gaussian-blur-1)
 
-  - #### [Box Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-blur)
+  - #### [Box Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-blur-1)
 
-  - #### [Median Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#median-blur)
+  - #### [Median Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#median-blur-1)
 
 ### Cropping and Resizing Algorithms
 
-  - #### [Simple Crop](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#simple-crop)
+  - #### [Simple Crop](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#simple-crop-1)
 
-  - #### [Nearest Neighbor Interpolation](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#nearest-neighbor-interpolation)
+  - #### [Nearest Neighbor Interpolation](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#nearest-neighbor-interpolation-1)
 
-  - #### [Bilinear Interpolation](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#bilinear-interpolation)
+  - #### [Bilinear Interpolation](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#bilinear-interpolation-1)
 
-  - #### [Box Sampling](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-sampling)
+  - #### [Box Sampling](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-sampling-1)
 
 ### Other Algorithms
 
-  - #### [Greyscale](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#greyscale)
+  - #### [Greyscale](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#greyscale-1)
 
-  - #### [Brightness](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#brightness)
+  - #### [Brightness](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#brightness-1)
 
 ## Gaussian Blur
 Gaussian blur is a blur algorithm which maintains detail well due to assigning weights based on distance from the original pixel. It makes use of the Gaussian function (also known as 'normal distribution' and 'bell curve') to assign weights when blurring per-pixel. When looking at how to convolve a pixel's surrounds to its own new value, we look to the Gaussian function, centered around this pixel in 2 dimensions, to assign weights for how each of the surrounding pixels will contribute to the center pixel's new RGB values. 
