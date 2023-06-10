@@ -1,5 +1,5 @@
 # From-scratch Image Processing Algorithm Implementations
-This is a collection image processing algorithms, implemented from scratch in python. Most of the algorithms are straightforward, save for Canny Edge Detection. As my process description may be lacking, please see [here](https://en.wikipedia.org/wiki/Canny_edge_detector) for more infor about it. Image handling is done with the PIL library and computation is with NumPy.
+This is a collection image processing algorithms, implemented from scratch in python. Most of the algorithms are straightforward, save for Canny Edge Detection. As my process description may be lacking, please see [here](https://en.wikipedia.org/wiki/Canny_edge_detector) for more info about it. Image handling is done with the PIL library and computation is with NumPy.
 
 ## Table of Contents
 
