@@ -24,17 +24,17 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
     
     # GREYSCALING IMAGE
     greyscaled_img_arr = greyscale(img_arr)
-    print("image greyscaled")
+    print("IMAGE GREYSCALED")
     time.sleep(1)
     
     # PERFORMING NOISE REDUCTION WITH MEDIAN GAUSSIAN BLUR
     # median blur, radius = 1
     median_blurred_img_arr = median_blur(greyscaled_img_arr, radius=1)
-    print("image median blurred")
+    print("IMAGE MEDIAN BLURRED")
     time.sleep(1)
     # Gaussian blur, sigma = 1
     noise_reduced_img_arr = gaussian_blur(median_blurred_img_arr, sigma=1)
-    print("image Gaussian blurred")
+    print("IMAGE GAUSSIAN BLURRED")
     time.sleep(1)
     
     # NEXT STEP
