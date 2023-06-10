@@ -10,12 +10,13 @@ from PIL import Image
 import click
 
 
-def greyscale(img_arr: np.ndarray) -> np.ndarray:
+def greyscale(img_arr: np.ndarray, strength: float) -> np.ndarray:
     """
     Operates on array representation of image to return a median blurred array
 
     Args:
         img_arr (np.ndarray): 3-d array representation of image
+        strength (float): strength of greyscale
 
     Returns:
         np.ndarray: Array representation of the greyscaled image
@@ -25,8 +26,9 @@ def greyscale(img_arr: np.ndarray) -> np.ndarray:
     
     for y, row in enumerate(img_arr):
         for x, pixel in enumerate(row):
-            # setting new pixel value to greyscaled RGB from pixel
-            new_img_arr[y, x] = np.mean(pixel)
+            # setting new pixel value to greyscaled RGB from pixel with strength
+            mean_val = np.mean(pixel)
+            new_img_arr[y, x] = pixel + (mean_val - pixel) * strength
     
     return new_img_arr
             
@@ -34,14 +36,18 @@ def greyscale(img_arr: np.ndarray) -> np.ndarray:
 # click commands
 @click.command(name="greyscale")
 @click.option('-f', '--filename', type=click.Path(exists=True))
+@click.option('-s', '--strength', type=float, default=0.5)
 
-def grey(filename: str) -> None:
+def grey(filename: str, strength: float) -> None:
     """
     command
     """
+    if not 0 <= strength <= 1:
+        raise ValueError("brightness factor must be between 0 and 1")
+    
     with Image.open(filename) as img:
         img_arr = np.array(img)
-        new_img_arr = greyscale(img_arr)
+        new_img_arr = greyscale(img_arr, strength)
         new_img = Image.fromarray(new_img_arr)
         new_img.show()
 

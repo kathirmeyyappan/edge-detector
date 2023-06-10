@@ -43,7 +43,7 @@ def brighten(img_arr: np.ndarray, brightness_factor: float) -> np.ndarray:
 # click commands
 @click.command(name="brightness")
 @click.option('-f', '--filename', type=click.Path(exists=True))
-@click.option('-b', '--brightness-factor', type=float, default=0)
+@click.option('-b', '--brightness-factor', type=float, default=0.5)
 
 def change_brightness(filename: str, brightness_factor: float) -> None:
     """
