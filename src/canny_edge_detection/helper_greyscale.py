@@ -1,7 +1,7 @@
 """
 This is a copy of the greyscale.py file found in the other_algorithms folder
-with the exception of a few message changes. I've copied it here for the sake of
-having all of my content relevant to the Canny edge detector in one place.
+that has been modified so that it takes the strength to be 1, effectively
+fully grescaling the image for further use in Canny edge detection.
 """
 
 from typing import List, Tuple
@@ -29,21 +29,3 @@ def greyscale(img_arr: np.ndarray) -> np.ndarray:
             new_img_arr[y, x] = np.mean(pixel)
     
     return new_img_arr
-            
-
-# click commands
-@click.command(name="greyscale")
-@click.option('-f', '--filename', type=click.Path(exists=True))
-
-def grey(filename: str) -> None:
-    """
-    command
-    """
-    with Image.open(filename) as img:
-        img_arr = np.array(img)
-        new_img_arr = greyscale(img_arr)
-        new_img = Image.fromarray(new_img_arr)
-        new_img.show()
-
-if __name__ == "__main__":
-    grey()
