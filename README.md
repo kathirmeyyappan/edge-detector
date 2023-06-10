@@ -147,7 +147,7 @@ To fully greyscale an image, we take a given pixel and set all of its RGB values
 My implementation of this algorithm can be found in [greyscale.py](src/other_algorithms/greyscale.py). To run this file, run this from the root: ```python3 src/src/other_algorithms/greyscale.py -f [FILEPATH] -s [STRENGTH]```, where the filepath is from the root (e.g. ```images/luffy.py```) and the strength is a float from 0 to 1. Below is an example of this algorithm run on [nichijou.jpg](images/nichijou.jpg) with strengths (top left, top right, bottom left, bottom right) of 0, 0.33, 0.67, and 1.
 
 <p align="center">
-  <img src="readme_screenshots/greyscale.png" alt="Greyscale Demonstration">
+  <img src="readme_screeshots/greyscale.png" alt="Greyscale Demonstration">
 </p>
 
 ## Brightness
