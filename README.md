@@ -142,9 +142,9 @@ Below we have two images. On the left is [gintama.jpg](images/gintama.jpg) run t
 As can be seen, the right image (box sampling) retains much more detail and smoothness by taking all of the original image's pixels into account as opposed to the left one (nearest neighbor interpolation).
 
 ## Greyscale
-To greyscale an image, we take a given pixel and set all of its RGB values to their cumulative average. As such, a pixel, ```< R, G, B >``` would become ```< (R + G + B) / 3, (R + G + B) / 3, (R + G + B) / 3 >```. 
+To fully greyscale an image, we take a given pixel and set all of its RGB values to their cumulative average. As such, a pixel, ```< R, G, B >``` would become ```< (R + G + B) / 3, (R + G + B) / 3, (R + G + B) / 3 >```. If we want to implement this operation with varying greyscale strengths, we need only make a weighted average between the original pixel and the fully grey one. This, benig a linear relationship, would directly apply a strength (from 0 to 1) on the image to grey it by that factor.
 
-My implementation of this algorithm can be found in [greyscale.py](src/other_algorithms/greyscale.py). To run this file, run this from the root: ```python3 src/src/other_algorithms/greyscale.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). Below is an example of this algorithm run on [nichijou.jpg](images/nichijou.jpg).
+My implementation of this algorithm can be found in [greyscale.py](src/other_algorithms/greyscale.py). To run this file, run this from the root: ```python3 src/src/other_algorithms/greyscale.py -f [FILEPATH] -s [STRENGTH]```, where the filepath is from the root (e.g. ```images/luffy.py```) and the strength is a float from 0 to 1. Below is an example of this algorithm run on [nichijou.jpg](images/nichijou.jpg) with strengths (top left, top right, bottom left, bottom right) of 0, 0.33, 0.67, and 1.
 
 <p align="center">
   <img src="readme_screenshots/greyscale.png" alt="Greyscale Demonstration">
