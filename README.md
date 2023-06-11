@@ -36,7 +36,7 @@ This is a collection image processing algorithms, implemented from scratch in py
 ## Sobel Edge Detection
 Sobel edge detection is an algorithm which highlights the edges of an image based on intensity changes. The first step in this is to greyscale the image. This allows us to map the color values as intensities. From here, we apply noise reduction (I used imports from my Gaussian and median blur implementations). Finally we approximate the changes in intensity to identify edges. These edges are simply discrete derivative approximations made through preset kernels that are convolved with the image. For more info on how Sobel edge detection works, see [here](https://en.wikipedia.org/wiki/Sobel_operator).
 
-My implementation of the Gaussian blur algorithm is in [sobel_edge_detector.py](src/edge_detection_algorithms/sobel_edge_detector.py). To run this file, run this from the root: ```python3 src/edge_detection_algorithms/sobel_edge_detector.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). On the left is the original image I used ([mugen.jpg](images/mugen.jpg)) and on the right is it run through the Sobel edge detector.
+My implementation of the Sobel edge detection algorithm is in [sobel_edge_detector.py](src/edge_detection_algorithms/sobel_edge_detector.py). To run this file, run this from the root: ```python3 src/edge_detection_algorithms/sobel_edge_detector.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). On the left is the original image I used ([mugen.jpg](images/mugen.jpg)) and on the right is it run through the Sobel edge detector.
 
 <p align="center">
   <img src="readme_screenshots/sobel_mugen.png" alt="Sobel Edge Detection Demonstration">
@@ -56,6 +56,25 @@ To achieve this result, we must apply some operations on our Sobel edge detected
 <p align="center">
   <img src="readme_screenshots/nonmax_supression_mugen.png" alt="Non-Maximum Supression Demo">
 </p>
+
+After this, we put our non-maximum suppressed image through a double threshold filter. Based on the intensities in the image, we choose a high and low threshold. Pixels with intensity values above the high threshold are now set to the max and pixels below the low one are set to zero. With this, we eliminate some false edges in our image that stem from noise. The result of this operation on [mugen.jpg](images/mugen.jpg) is shown below (with the non-maximum suppressed image on the left and the double threshold image on the right).
+
+<p align="center">
+  <img src="readme_screenshots/double_threshold_mugen.png" alt="Double Threshold Demo">
+</p>
+
+Above, bright edges are "strong" and simmer edges are "weak". The final process that we put our image through is hysteresis. We simply iterate through the image, finding every weak pixel. If a weak pixel borders a strong pixel, we make it strong. If it does not, we set its intensity to 0, thus removing more extra noise. The final result of this operation applied on [mugen.jpg](images/mugen.jpg) is shown below (with the double threshold image on the left and the post-hysteresis image on the right).
+
+<p align="center">
+  <img src="readme_screenshots/hysteresis_mugen.png" alt="Hysteresis Demo">
+</p>
+
+Canny edge detection has many more small steps, optimizations, and alternate approaches which I did not cover. Additionally, my verbal explanation of some of the steps does not do justice to how neat some of the math actually ends up being. To learn more about the algorithm, I encourage that you read [here](https://en.wikipedia.org/wiki/Canny_edge_detector). 
+
+My implementation of the Canny edge detector is in [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py). To run this file, run this from the root: ```python3 src/edge_detection_algorithms/canny_edge_detector.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). 
+
+You can see how the Canny edge detector looks on various images (before and after) in [canny_results](canny_results).
+
 
 ## Gaussian Blur
 Gaussian blur is a blur algorithm which maintains detail well due to assigning weights based on distance from the original pixel. It makes use of the Gaussian function (also known as 'normal distribution' and 'bell curve') to assign weights when blurring per-pixel. When looking at how to convolve a pixel's surrounds to its own new value, we look to the Gaussian function, centered around this pixel in 2 dimensions, to assign weights for how each of the surrounding pixels will contribute to the center pixel's new RGB values. 
