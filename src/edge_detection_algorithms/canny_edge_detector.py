@@ -13,7 +13,7 @@ from helper_blur import gaussian_blur, median_blur
 from helper_greyscale import greyscale
 
 
-def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
+def canny_edge_detect(img_arr: np.ndarray) -> np.ndarray:
     """
     Performs Canny edge detection on an image array.
 
@@ -30,8 +30,7 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
     ### GREYSCALING IMAGE ###
     
     greyscaled_img_arr = greyscale(img_arr)
-    print("GREYSCALE APPLIED")
-    time.sleep(1)
+    print("\nGREYSCALE APPLIED\n")
     
     
     ### PERFORMING NOISE REDUCTION WITH MEDIAN AND GAUSSIAN BLUR ###
@@ -39,13 +38,11 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
     # median blur, radius depends on image size to clear 
     r = 0 if WIDTH < 500 else 1
     median_blurred_img_arr = median_blur(greyscaled_img_arr, radius=r)
-    print("MEDIAN BLUR APPLIED")
-    time.sleep(1)
+    print("\nMEDIAN BLUR APPLIED\n")
     
     # Gaussian blur, sigma = 2
     noise_reduced_img_arr = gaussian_blur(median_blurred_img_arr, sigma=2)
-    print("GAUSSIAN BLUR APPLIED")
-    time.sleep(1)
+    print("\nGAUSSIAN BLUR APPLIED")
     
     
     ### GRADIENT CALCULATION ###
@@ -94,8 +91,7 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
     theta_vals = theta_vals.astype(np.float64)
     theta_vals[theta_vals < 0] += np.pi
           
-    print("GRADIENT AND IMAGE ARRAY CONVOLVED\nTHETA VALUES CALCULATED")
-    time.sleep(1)
+    print("\nGRADIENT AND IMAGE ARRAY CONVOLVED\n\nTHETA VALUES CALCULATED")
     
     
     ### APPLYING NON-MAXIMUM SUPRESSION ###
@@ -143,8 +139,7 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
             else:
                 suppressed_arr[y, x] = 0
             
-    print("NON-MAXIMUM SUPPRESSION APPLIED")
-    time.sleep(1)     
+    print("\nNON-MAXIMUM SUPPRESSION APPLIED")
     
     
     ### APPLYING DOUBLE THRESHOLD AND HYSTERESIS ###
@@ -169,8 +164,7 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
                 # weak edge
                 double_threshold_arr[y, x] = weak
                 
-    print("DOUBLE THRESHOLD APPLIED")
-    time.sleep(1) 
+    print("\nDOUBLE THRESHOLD APPLIED")
     
     # applying hysteresis
     
@@ -203,7 +197,7 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
                         break
                 final_arr[y, x] = strong if include else 0
     
-    print("HYSTERESIS APPLIED")
+    print("\nHYSTERESIS APPLIED")
     time.sleep(1) 
                     
     
@@ -216,7 +210,7 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
             val = final_arr[y, x]
             final_image_arr[y, x] = np.array([val, val, val])
     
-    print("DONE")
+    print("\nIMAGE COMPLETE")
     return final_image_arr
 
 
@@ -230,7 +224,7 @@ def edge_detect(filename: str) -> None:
     """
     with Image.open(filename) as img:
         img_arr = np.array(img)
-        new_img_arr = canny_edge_detection(img_arr)
+        new_img_arr = canny_edge_detect(img_arr)
         new_img = Image.fromarray(new_img_arr)
         new_img.show()
 

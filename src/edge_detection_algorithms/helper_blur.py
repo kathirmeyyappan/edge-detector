@@ -26,7 +26,7 @@ def median_blur(img_arr: np.ndarray, radius: int) -> np.ndarray:
     new_img_arr = img_arr.copy()
     
     for y, row in enumerate(img_arr):
-        if y % 10 == 0:
+        if y % 50 == 0:
             print(f"{y}/{img_arr.shape[0]} pixel rows calculated for median blur")
         for x, _ in enumerate(row):
             
@@ -61,7 +61,7 @@ def gaussian_blur(img_arr: np.ndarray, sigma: int) -> np.ndarray:
     kernel = get_kernel(sigma)
     
     for y, row in enumerate(img_arr):
-        if y % 10 == 0:
+        if y % 25 == 0:
             print(f"{y}/{img_arr.shape[0]} pixel rows calculated for Gaussian blur")
         for x, _ in enumerate(row):
             
