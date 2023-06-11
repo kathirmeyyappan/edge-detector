@@ -36,16 +36,26 @@ This is a collection image processing algorithms, implemented from scratch in py
 ## Sobel Edge Detection
 Sobel edge detection is an algorithm which highlights the edges of an image based on intensity changes. The first step in this is to greyscale the image. This allows us to map the color values as intensities. From here, we apply noise reduction (I used imports from my Gaussian and median blur implementations). Finally we approximate the changes in intensity to identify edges. These edges are simply discrete derivative approximations made through preset kernels that are convolved with the image. For more info on how Sobel edge detection works, see [here](https://en.wikipedia.org/wiki/Sobel_operator).
 
-My implementation of the Gaussian blur algorithm is in [sobel_edge_detector.py](src/edge_detection_algorithms/sobel_edge_detector.py). To run this file, run this from the root: ```python3 src/edge_detection_algorithms/sobel_edge_detector.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). On the left is the original image I used ([haikyuu.jpg](images/haikyuu.jpg)) and on the right is it run through the Sobel edge detector.
+My implementation of the Gaussian blur algorithm is in [sobel_edge_detector.py](src/edge_detection_algorithms/sobel_edge_detector.py). To run this file, run this from the root: ```python3 src/edge_detection_algorithms/sobel_edge_detector.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). On the left is the original image I used ([mugen.jpg](images/mugen.jpg)) and on the right is it run through the Sobel edge detector.
 
 <p align="center">
-  <img src="readme_screenshots/sobel_hinata.png" alt="Sobel Edge Detection Demonstration">
+  <img src="readme_screenshots/sobel_mugen.png" alt="Sobel Edge Detection Demonstration">
 </p>
 
 As can be seen, the edges are highlighted with varying intensity and thickness based on the strength and range of the changes in color. The Sobel edge detection method is useful for visualizing edges, but because it does not show thin edges with applicable detail, it is not as useful in general.
 
 ## Canny Edge Detection
-TBD
+Canny edge detection takes our implementation one step further. By completely identifying edges as existent or not, it gives a clear picture of where exactly our edges in an image may be, which is very useful for computation. Below is an example of my implementation of Canny edge detection applied on [forgers.jpg](images/forgers.jpg).
+
+<p align="center">
+  <img src="readme_screenshots/canny_forgers.png" alt="Canny Edge Detector Demonstration on Forgers Image">
+</p>
+
+To achieve this result, we must apply some operations on our Sobel edge detected image. Consider [mugen.jpg](images/mugen.jpg), which we used before. After applying Sobel edge detection, our first goal is to remove the thicker lines and make them thin, showing only one change point. This can be achieved by an operation called non-maximum suppression. For a given pixel, we calculate the direction that its gradient changes (using NumPy's specialized arctan2 function), and use this angle to check the perpendicular neighbors of the pixel. If the pixel's change intensity is larger than its neighbors, then we keep the value. Otherwise, we set it to zero. By doing this, we achieve thinner edges and remove some stray noise that the noise reduction may not have initially caught. The result of this is shown below.
+
+<p align="center">
+  <img src="readme_screenshots/nonmax_supression_mugen.png" alt="Non-Maximum Supression Demo">
+</p>
 
 ## Gaussian Blur
 Gaussian blur is a blur algorithm which maintains detail well due to assigning weights based on distance from the original pixel. It makes use of the Gaussian function (also known as 'normal distribution' and 'bell curve') to assign weights when blurring per-pixel. When looking at how to convolve a pixel's surrounds to its own new value, we look to the Gaussian function, centered around this pixel in 2 dimensions, to assign weights for how each of the surrounding pixels will contribute to the center pixel's new RGB values. 
