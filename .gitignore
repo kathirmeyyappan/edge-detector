@@ -1,7 +1,5 @@
 venv
 src/blur_algorithms/__pycache__
 src/resize_algorithms/__pycache__
-src/canny_edge_detection/__pycache__/helper_blur.cpython-310.pyc
-src/canny_edge_detection/__pycache__/helper_greyscale.cpython-310.pyc
-src/edge_detection_algorithms/__pycache__/helper_greyscale.cpython-310.pyc
-src/edge_detection_algorithms/__pycache__/helper_blur.cpython-310.pyc
+src/canny_edge_detection/__pycache__
+src/edge_detection_algorithms/__pycache__
