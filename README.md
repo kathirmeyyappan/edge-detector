@@ -1,10 +1,13 @@
 # From-scratch Image Processing Algorithm Implementations
-This is a collection image processing algorithms, implemented from scratch in python. Most of the algorithms are straightforward, save for Canny Edge Detection. As my process description may be lacking, please see [here](https://en.wikipedia.org/wiki/Canny_edge_detector) for more info about it. Image handling is done with the PIL library and computation is with NumPy.
+This is a collection image processing algorithms, implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
 
 ## Table of Contents
 
 ### Edge Detection
-  - #### [Canny Edge Detection](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#canny-edge-detection-1)
+
+- #### [Sobel Edge Detection](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#sobel-edge-detection-1)
+
+- #### [Canny Edge Detection](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#canny-edge-detection-1)
 
 ### Blur Algorithms
 
@@ -29,6 +32,20 @@ This is a collection image processing algorithms, implemented from scratch in py
   - #### [Greyscale](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#greyscale-1)
 
   - #### [Brightness](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#brightness-1)
+
+## Sobel Edge Detection
+Sobel edge detection is an algorithm which highlights the edges of an image based on intensity changes. The first step in this is to greyscale the image. This allows us to map the color values as intensities. From here, we apply noise reduction (I used imports from my Gaussian and median blur implementations). Finally we approximate the changes in intensity to identify edges. These edges are simply discrete derivative approximations made through preset kernels that are convolved with the image. For more info on how Sobel edge detection works, see [here](https://en.wikipedia.org/wiki/Sobel_operator)
+
+My implementation of the Gaussian blur algorithm is in [sobel_edge_detector.py](src/edge_detection_algorithms/sobel_edge_detector.py). To run this file, run this from the root: ```python3 src/edge_detection_algorithms/sobel_edge_detector.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). On the left is the original image and on the right is it run through the Sobel edge detector.
+
+<p align="center">
+  <img src="readme_screenshots/sobel.png" alt="Sobel Edge Detection Demonstration">
+</p>
+
+As can be seen, the edges are highlighted with varying intensity and thickness based on the strength and range of the changes in color. The Sobel edge detection method is useful for visualizing edges, but because it does not show thin edges with applicable detail, it is not as useful in general.
+
+## Canny Edge Detection
+TBD
 
 ## Gaussian Blur
 Gaussian blur is a blur algorithm which maintains detail well due to assigning weights based on distance from the original pixel. It makes use of the Gaussian function (also known as 'normal distribution' and 'bell curve') to assign weights when blurring per-pixel. When looking at how to convolve a pixel's surrounds to its own new value, we look to the Gaussian function, centered around this pixel in 2 dimensions, to assign weights for how each of the surrounding pixels will contribute to the center pixel's new RGB values. 
