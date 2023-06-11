@@ -26,14 +26,12 @@ def sobel_edge_detection(img_arr: np.ndarray) -> np.ndarray:
     
     
     # GREYSCALING IMAGE
-    
     greyscaled_img_arr = greyscale(img_arr)
     print("IMAGE GREYSCALED")
     time.sleep(1)
     
     
     # PERFORMING NOISE REDUCTION WITH MEDIAN AND GAUSSIAN BLUR
-    
     # median blur, radius depends on image size to clear 
     r = 0 if WIDTH < 500 else 1
     median_blurred_img_arr = median_blur(greyscaled_img_arr, radius=r)
@@ -47,13 +45,16 @@ def sobel_edge_detection(img_arr: np.ndarray) -> np.ndarray:
     
     
     # GRADIENT CALCULATION
-    
     # turning image array into 2-d array
     intensity_arr = noise_reduced_img_arr[:, :, 0]
     
     # X and Y Sobel filters (discrete derivative approximations in dx and dy)
-    X_KERNEL = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]])
-    Y_KERNEL = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
+    X_KERNEL = np.array([[1, 0, -1],
+                         [2, 0, -2],
+                         [1, 0, -1]])
+    Y_KERNEL = np.array([[-1, -2, -1],
+                         [0, 0, 0],
+                         [1, 2, 1]])
     
     # creating array to be convolved with estimated derivative gradients
     convolved_arr = intensity_arr.copy()
