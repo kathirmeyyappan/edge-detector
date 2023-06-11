@@ -11,9 +11,9 @@ from helper_blur import gaussian_blur, median_blur
 from helper_greyscale import greyscale
 
 
-def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
+def sobel_edge_detection(img_arr: np.ndarray) -> np.ndarray:
     """
-    Performs Canny edge detection on an image array.
+    Performs Sobel edge detection on an image array.
 
     Args:
         img_arr (np.ndarray): 3-d array representation of image
@@ -93,7 +93,7 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
 
 
 # click commands
-@click.command(name="canny_edge_detector")
+@click.command(name="Sobel_edge_detector")
 @click.option('-f', '--filename', type=click.Path(exists=True))
 
 def edge_detect(filename: str) -> None:
@@ -102,7 +102,7 @@ def edge_detect(filename: str) -> None:
     """
     with Image.open(filename) as img:
         img_arr = np.array(img)
-        new_img_arr = canny_edge_detection(img_arr)
+        new_img_arr = sobel_edge_detection(img_arr)
         new_img = Image.fromarray(new_img_arr)
         new_img.show()
 
