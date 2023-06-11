@@ -6,32 +6,45 @@ This is a collection image processing algorithms, implemented from scratch in py
 ### Edge Detection
 
 - #### [Sobel Edge Detection](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#sobel-edge-detection-1)
+  - [sobel_edge_detector.py](src/edge_detection_algorithms/sobel_edge_detector.py)
 
 - #### [Canny Edge Detection](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#canny-edge-detection-1)
+  - [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py)
+  - [canny_results](canny_results)
 
 ### Blur Algorithms
 
   - #### [Gaussian Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#gaussian-blur-1)
+    - [gaussian_blur.py](src/blur_algorithms/gaussian_blur.py)
 
   - #### [Box Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-blur-1)
+    - [box_blur.py](src/blur_algorithms/box_blur.py)
 
   - #### [Median Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#median-blur-1)
+    - [median_blur.py](src/blur_algorithms/median_blur.py)
 
 ### Cropping and Resizing Algorithms
 
   - #### [Simple Crop](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#simple-crop-1)
+    - [simple_crop.py](src/resize_algorithms/simple_crop.py)
+    - [simple_crop_gui.py](src/resize_algorithms/simple_crop_gui.py)
 
   - #### [Nearest Neighbor Interpolation](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#nearest-neighbor-interpolation-1)
+    - [nearest_neighbor_interpolation.py](src/resize_algorithms/nearest_neighbor_interpolation.py)
 
   - #### [Bilinear Interpolation](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#bilinear-interpolation-1)
+    - [bilinear_interpolation.py](src/resize_algorithms/bilinear_interpolation.py)
 
   - #### [Box Sampling](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-sampling-1)
+    - [box_sampling.py](src/resize_algorithms/box_sampling.py)
 
 ### Other Algorithms
 
   - #### [Greyscale](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#greyscale-1)
+    - [greyscale.py](src/other_algorithms/greyscale.py)
 
   - #### [Brightness](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#brightness-1)
+    - [brightness.py](src/other_algorithms/brightness.py)
 
 ## Sobel Edge Detection
 Sobel edge detection is an algorithm which highlights the edges of an image based on intensity changes. The first step in this is to greyscale the image. This allows us to map the color values as intensities. From here, we apply noise reduction (I used imports from my Gaussian and median blur implementations). Finally we approximate the changes in intensity to identify edges. These edges are simply discrete derivative approximations made through preset kernels that are convolved with the image. For more info on how Sobel edge detection works, see [here](https://en.wikipedia.org/wiki/Sobel_operator).
