@@ -40,7 +40,6 @@ def canny_animate(filename: str) -> None:
     command
     """
     gif_name = filename.split('/')[-1]
-    print(gif_name)
     
     # changing gif into list of image arrays
     img_arr_seq = []
@@ -59,7 +58,7 @@ def canny_animate(filename: str) -> None:
     
     # saving new gif (from list of images) to canny_animation folder
     img_seq[0].save(f"canny_animations/canny_{gif_name}", 
-                    save_all=True, append_images=img_seq[1:])
+                    save_all=True, append_images=img_seq[1:], loop=0)
 
 if __name__ == "__main__":
     canny_animate()
