@@ -29,9 +29,8 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
     
     ### GREYSCALING IMAGE ###
     
-    
     greyscaled_img_arr = greyscale(img_arr)
-    print("IMAGE GREYSCALED")
+    print("GREYSCALE APPLIED")
     time.sleep(1)
     
     
@@ -40,13 +39,12 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
     # median blur, radius depends on image size to clear 
     r = 0 if WIDTH < 500 else 1
     median_blurred_img_arr = median_blur(greyscaled_img_arr, radius=r)
-    print("IMAGE MEDIAN BLURRED")
+    print("MEDIAN BLUR APPLIED")
     time.sleep(1)
     
-    # Gaussian blur, sigma = 1
-    s = 1 if WIDTH < 500 else 2
-    noise_reduced_img_arr = gaussian_blur(median_blurred_img_arr, sigma=s)
-    print("IMAGE GAUSSIAN BLURRED")
+    # Gaussian blur, sigma = 2
+    noise_reduced_img_arr = gaussian_blur(median_blurred_img_arr, sigma=2)
+    print("GAUSSIAN BLUR APPLIED")
     time.sleep(1)
     
     
@@ -111,9 +109,6 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
         # ignore edge
         if y == 0 or y == HEIGHT - 1:
             continue
-        if y % 10 == 0:
-            print(f"{y}/{HEIGHT - 1} pixel rows calculated for "
-                  "non-maximum supression")
             
         for x, _ in enumerate(row):
             # ignore edge
@@ -150,19 +145,79 @@ def canny_edge_detection(img_arr: np.ndarray) -> np.ndarray:
             
     print("NON-MAXIMUM SUPPRESSION APPLIED")
     time.sleep(1)     
+    
+    
+    ### APPLYING DOUBLE THRESHOLD AND HYSTERESIS ###
+    
+    double_threshold_arr = np.zeros_like(suppressed_arr)
+    
+    high_th = suppressed_arr.max() * 0.1
+    low_th = high_th * 0.5
+    strong = 255
+    weak = 50
+    
+    for y, row in enumerate(suppressed_arr):
+        for x, intensity in enumerate(row):
             
+            if intensity > high_th:
+                # strong edge
+                double_threshold_arr[y, x] = strong
+            elif intensity < low_th:
+                # false edge
+                double_threshold_arr[y, x] = 0
+            else:
+                # weak edge
+                double_threshold_arr[y, x] = weak
+                
+    print("DOUBLE THRESHOLD APPLIED")
+    time.sleep(1) 
+    
+    # applying hysteresis
+    
+    # creating final image array
+    final_arr = np.zeros_like(double_threshold_arr)
+    # directions to check for strong edge
+    directions = [(-1, 0), (1, 0), (0, 1), (0, -1), 
+                  (-1, -1), (-1, 1), (1, -1), (1, 1)]
+    
+    for y, row in enumerate(double_threshold_arr):
+        # ignore edge
+        if y == 0 or y == HEIGHT - 1:
+            continue
+            
+        for x, val in enumerate(row):
+            # ignore edge
+            if x == 0 or x == WIDTH - 1:
+                continue
+            
+            if val == strong or val == 0:
+                final_arr[y, x] = val
+            
+            # determining whether to include weak edge based on neighbors being
+            # strong edges    
+            else:
+                include = False
+                for dx, dy in directions:
+                    if double_threshold_arr[y+dy, x+dx] == strong:
+                        include = True
+                        break
+                final_arr[y, x] = strong if include else 0
+    
+    print("HYSTERESIS APPLIED")
+    time.sleep(1) 
+                    
     
     ### RETURNING FINAL IMAGE ARRAY ###
     
-    final_image = np.zeros((HEIGHT - 1, WIDTH - 1, 3), dtype=np.uint8)
+    final_image_arr = np.zeros((HEIGHT - 1, WIDTH - 1, 3), dtype=np.uint8)
     # putting intensity values from final array back into RGB format
-    for y, row in enumerate(final_image):        
+    for y, row in enumerate(final_image_arr):        
         for x, _ in enumerate(row):
-            val = suppressed_arr[y, x]
-            final_image[y, x] = np.array([val, val, val])
+            val = final_arr[y, x]
+            final_image_arr[y, x] = np.array([val, val, val])
     
     print("DONE")
-    return final_image
+    return final_image_arr
 
 
 # click commands
