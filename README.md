@@ -1,4 +1,4 @@
-# From-scratch Image Processing Algorithm Implementations
+# From-scratch Implementations of Edge Detectors and Other Image Processing Algorithms
 This is a collection image processing algorithms, implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
 
 ## Table of Contents
