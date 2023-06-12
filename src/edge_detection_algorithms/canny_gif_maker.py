@@ -25,9 +25,9 @@ def canny_gif(img_arr_seq: List[np.ndarray], color: bool) -> List[np.ndarray]:
             detector applied images which constitute the gif
     """
     canny_seq = []
-    for i, img_arr in enumerate(img_arr_seq, color):
+    for i, img_arr in enumerate(img_arr_seq):
         print(f"\nPROCESSING IMAGE {i+1}/{len(img_arr_seq)}")
-        canny_seq.append(canny_edge_detect(img_arr))
+        canny_seq.append(canny_edge_detect(img_arr, color))
         print(f"\nAPPLIED CANNY EDGE DETECTION TO IMAGE {i+1}/{len(img_arr_seq)}\n")
     
     return canny_seq
@@ -41,7 +41,9 @@ def canny_animate(filename: str, color: bool) -> None:
     """
     command
     """
-    gif_name = filename.split('/')[-1]
+    gif_name = filename.split('/')[-1][-4]
+    if color:
+        gif_name += "_colored"
     
     # changing gif into list of image arrays
     img_arr_seq = []
@@ -59,7 +61,7 @@ def canny_animate(filename: str, color: bool) -> None:
         img_seq.append(Image.fromarray(img_arr))
     
     # saving new gif (from list of images) to canny_animation folder
-    img_seq[0].save(f"canny_animations/canny_{gif_name}", 
+    img_seq[0].save(f"canny_animations/canny_{gif_name}.gif", 
                     save_all=True, append_images=img_seq[1:], loop=0)
 
 if __name__ == "__main__":
