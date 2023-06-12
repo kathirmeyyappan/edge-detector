@@ -1,8 +1,11 @@
 # From-scratch Implementations of Edge Detectors and Other Image Processing Algorithms
-This is a collection image processing algorithms, implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
 
-<p align="center>
-  <img src="readme_screenshots/haikyuu_header" alt="Haikyuu Header">
+<p align="center">
+  <br>
+  <img src="readme_screenshots/haikyuu_header.gif" alt="Haikyuu Header GIF">
+
+   ### This is a collection image processing algorithms, implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
+  <br>
 </p>
 
 ## Table of Contents
