@@ -27,7 +27,7 @@ def canny_gif(img_arr_seq: List[np.ndarray]) -> List[np.ndarray]:
     for i, img_arr in enumerate(img_arr_seq):
         print(f"\nPROCESSING IMAGE {i+1}/{len(img_arr_seq)}")
         canny_seq.append(canny_edge_detect(img_arr))
-        print(f"\nAPPLIED CANNY GIF DETECTION TO IMAGE {i+1}/{len(img_arr_seq)}\n")
+        print(f"\nAPPLIED CANNY EDGE DETECTION TO IMAGE {i+1}/{len(img_arr_seq)}\n")
     
     return canny_seq
 

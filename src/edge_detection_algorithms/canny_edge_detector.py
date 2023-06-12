@@ -6,7 +6,6 @@ the exception of the calculation of theta, which we use here later on.
 
 from typing import List, Tuple, Optional
 import numpy as np
-import time
 from PIL import Image
 import click
 from helper_blur import gaussian_blur, median_blur
@@ -196,9 +195,7 @@ def canny_edge_detect(img_arr: np.ndarray) -> np.ndarray:
                         include = True
                         break
                 final_arr[y, x] = strong if include else 0
-    
     print("\nHYSTERESIS APPLIED")
-    time.sleep(1) 
                     
     
     ### RETURNING FINAL IMAGE ARRAY ###
