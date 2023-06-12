@@ -11,7 +11,7 @@ from helper_blur import gaussian_blur, median_blur
 from helper_greyscale import greyscale
 
 
-def sobel_edge_detection(img_arr: np.ndarray) -> np.ndarray:
+def sobel_edge_detect(img_arr: np.ndarray) -> np.ndarray:
     """
     Performs Sobel edge detection on an image array.
 
@@ -27,21 +27,18 @@ def sobel_edge_detection(img_arr: np.ndarray) -> np.ndarray:
     
     # GREYSCALING IMAGE
     greyscaled_img_arr = greyscale(img_arr)
-    print("IMAGE GREYSCALED")
-    time.sleep(1)
+    print("\nGREYSCALE APPLIED\n")
     
     
     # PERFORMING NOISE REDUCTION WITH MEDIAN AND GAUSSIAN BLUR
     # median blur, radius depends on image size to clear 
     r = 0 if WIDTH < 500 else 1
     median_blurred_img_arr = median_blur(greyscaled_img_arr, radius=r)
-    print("IMAGE MEDIAN BLURRED")
-    time.sleep(1)
+    print("\nMEDIAN BLUR APPLIED\n")
     
     # Gaussian blur, sigma = 1
     noise_reduced_img_arr = gaussian_blur(median_blurred_img_arr, sigma=2)
-    print("IMAGE GAUSSIAN BLURRED")
-    time.sleep(1)
+    print("\nGAUSSIAN BLUR APPLIED")
     
     
     # GRADIENT CALCULATION
@@ -75,8 +72,7 @@ def sobel_edge_detection(img_arr: np.ndarray) -> np.ndarray:
             g_y = np.sum(Y_KERNEL * intensity_arr[y-1:y+2, x-1:x+2])
             
             convolved_arr[y,x] = np.sqrt(g_x**2 + g_y**2)
-    print("GRADIENT AND IMAGE ARRAY CONVOLVED")
-    time.sleep(1)
+    print("\nGRADIENT AND IMAGE ARRAY CONVOLVED\n\nTHETA VALUES CALCULATED")
     
     # removing edges that weren't convolved
     convolved_arr = np.squeeze(convolved_arr)
@@ -89,7 +85,7 @@ def sobel_edge_detection(img_arr: np.ndarray) -> np.ndarray:
             val = convolved_arr[y,x]
             final_image[y, x] = np.array([val, val, val])
     
-    print("DONE")
+    print("\nIMAGE COMPLETE")
     return final_image
 
 
@@ -103,7 +99,7 @@ def edge_detect(filename: str) -> None:
     """
     with Image.open(filename) as img:
         img_arr = np.array(img)
-        new_img_arr = sobel_edge_detection(img_arr)
+        new_img_arr = sobel_edge_detect(img_arr)
         new_img = Image.fromarray(new_img_arr)
         new_img.show()
 
