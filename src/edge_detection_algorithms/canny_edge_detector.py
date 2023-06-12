@@ -10,14 +10,16 @@ from PIL import Image
 import click
 from helper_blur import gaussian_blur, median_blur
 from helper_greyscale import greyscale
+from helper_rainbow_fill import get_color
 
 
-def canny_edge_detect(img_arr: np.ndarray) -> np.ndarray:
+def canny_edge_detect(img_arr: np.ndarray, color: bool) -> np.ndarray:
     """
     Performs Canny edge detection on an image array.
 
     Args:
         img_arr (np.ndarray): 3-d array representation of image
+        color (bool): option to color edges based on edge gradient direction
 
     Returns:
         np.ndarray: Array representation of the edge detector applied image
@@ -202,11 +204,19 @@ def canny_edge_detect(img_arr: np.ndarray) -> np.ndarray:
     
     final_image_arr = np.zeros((HEIGHT - 1, WIDTH - 1, 3), dtype=np.uint8)
     # putting intensity values from final array back into RGB format
-    for y, row in enumerate(final_image_arr):        
+    for y, row in enumerate(final_image_arr):    
         for x, _ in enumerate(row):
-            val = final_arr[y, x]
-            final_image_arr[y, x] = np.array([val, val, val])
-    
+            if not color:
+                val = final_arr[y, x]
+                pixel_val = np.array([val, val, val])
+            else:
+                # optionally assigning edge color based on gradient slope
+                if final_arr[y, x] != 0:
+                    pixel_val = get_color(theta_vals[y, x])
+                else:
+                    pixel_val = np.array([0, 0, 0])
+            final_image_arr[y, x] = pixel_val
+    print("\nTHETA GRADIENT COLORING COMPLETE")
     print("\nIMAGE COMPLETE")
     return final_image_arr
 
@@ -214,14 +224,15 @@ def canny_edge_detect(img_arr: np.ndarray) -> np.ndarray:
 # click commands
 @click.command(name="canny_edge_detector")
 @click.option('-f', '--filename', type=click.Path(exists=True))
+@click.option("--color/--no-color", default=True)
 
-def edge_detect(filename: str) -> None:
+def edge_detect(filename: str, color: bool) -> None:
     """
     command
     """
     with Image.open(filename) as img:
         img_arr = np.array(img)
-        new_img_arr = canny_edge_detect(img_arr)
+        new_img_arr = canny_edge_detect(img_arr, color)
         new_img = Image.fromarray(new_img_arr)
         new_img.show()
 
