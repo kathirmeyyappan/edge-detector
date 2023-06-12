@@ -11,20 +11,21 @@ import click
 from canny_edge_detector import canny_edge_detect
 
 
-def canny_gif(img_arr_seq: List[np.ndarray]) -> List[np.ndarray]:
+def canny_gif(img_arr_seq: List[np.ndarray], color: bool) -> List[np.ndarray]:
     """
     Performs Canny edge detection on an image array.
 
     Args:
         img_arr_seq (List[np.ndarray]): sequence of 3-d array representations of 
             images which constitute the gif.
+        color (bool): option to color edges based on edge gradient direction
 
     Returns:
         List[np.ndarray]: Sequence of array representations of the edge 
             detector applied images which constitute the gif
     """
     canny_seq = []
-    for i, img_arr in enumerate(img_arr_seq):
+    for i, img_arr in enumerate(img_arr_seq, color):
         print(f"\nPROCESSING IMAGE {i+1}/{len(img_arr_seq)}")
         canny_seq.append(canny_edge_detect(img_arr))
         print(f"\nAPPLIED CANNY EDGE DETECTION TO IMAGE {i+1}/{len(img_arr_seq)}\n")
@@ -34,8 +35,9 @@ def canny_gif(img_arr_seq: List[np.ndarray]) -> List[np.ndarray]:
 # click commands
 @click.command(name="canny_gif_maker")
 @click.option('-f', '--filename', type=click.Path(exists=True))
+@click.option("--color/--no-color", default=True)
 
-def canny_animate(filename: str) -> None:
+def canny_animate(filename: str, color: bool) -> None:
     """
     command
     """
@@ -50,7 +52,7 @@ def canny_animate(filename: str) -> None:
             img_arr_seq.append(img_arr)
 
     # applying Canny edge detection to all images in list
-    canny_gif_arr = canny_gif(img_arr_seq)
+    canny_gif_arr = canny_gif(img_arr_seq, color)
     # changing each image array in list to image and storing in new list
     img_seq = []
     for img_arr in canny_gif_arr:
