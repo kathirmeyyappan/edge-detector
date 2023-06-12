@@ -1,12 +1,12 @@
-# From-scratch Implementations of Edge Detectors and Other Image Processing Algorithms
+# Edge Detection From the Ground Up
 
-<p align="center">
+#### Shown below is a gif that has been run through my twist on the famous Canny edge detector. Read more to see details about my unique implementation which uses the edge gradient theta value to construct a heat map which shows edge orientation.
+<p align="center">  
   <br>
-  <img src="readme_screenshots/haikyuu_header.gif" alt="Haikyuu Header GIF">
-
-   ### This is a collection image processing algorithms, implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
-  <br>
+  <img src="readme_screenshots/haikyuu_header.gif" alt="Haikyuu Header GIF" width="80%">
 </p>
+
+#### This repo contains some edge detection algorithms and tools, as well as a collection of simpler image processing algorithms, all implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
 
 ## Table of Contents
 
@@ -69,7 +69,13 @@ My implementation of the Sobel edge detection algorithm is in [sobel_edge_detect
   <img src="readme_screenshots/sobel_mugen.png" alt="Sobel Edge Detection Demonstration">
 </p>
 
-As can be seen, the edges are highlighted with varying intensity and thickness based on the strength and range of the changes in color. The Sobel edge detection method is useful for visualizing edges, but because it does not show thin edges with applicable detail, it is not as useful in general. I have also implemented a Sobel gif maker ([sobel_gif_maker.py](src/edge_detection_algorithms/sobel_gif_maker.py)), where you can input a gif in the same way as [sobel_edge_detector.py](src/edge_detection_algorithms/sobel_edge_detector.py). Every frame is run through the algorithm, and the resulting gif is saved to [canny_animations](canny_animations).
+As can be seen, the edges are highlighted with varying intensity and thickness based on the strength and range of the changes in color. The Sobel edge detection method is useful for visualizing edges, but because it does not show thin edges with applicable detail, it is not as useful in general. 
+
+I have also implemented a Sobel gif maker ([sobel_gif_maker.py](src/edge_detection_algorithms/sobel_gif_maker.py)), where you can input a gif in the same way as [sobel_edge_detector.py](src/edge_detection_algorithms/sobel_edge_detector.py). Every frame is run through the algorithm, and the resulting gif is saved to [canny_animations](canny_animations). Below is an example of running [sobel_gif_maker.py](src/edge_detection_algorithms/sobel_gif_maker.py) on [haikyuu_spike.gif](images/haikyuu_spike.gif).
+
+<p align="center">
+  <img src="canny_animations/sobel_haikyuu_spike.gif" alt="Sobel GIF">
+</p>
 
 ## Canny Edge Detection
 Canny edge detection takes our implementation one step further. By completely identifying edges as existent or not, it gives a clear picture of where exactly our edges in an image may be, which is very useful for computation. Below is an example of my implementation of Canny edge detection applied on [forgers.jpg](images/forgers.jpg).
@@ -100,15 +106,25 @@ Canny edge detection has many more small steps, optimizations, and alternate app
 
 My implementation of the Canny edge detector is in [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py). To run this file, run this from the root: ```python3 src/edge_detection_algorithms/canny_edge_detector.py -f [FILEPATH] --no-color```, where the filepath is from the root (e.g. ```images/luffy.py```). 
 
-You can see how the Canny edge detector looks on various images (before and after) in [canny_results](canny_results). I have also implemented a Canny gif maker ([canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py)), where you can input a gif in the same way as [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py). Every frame is run through the algorithm, and the resulting gif is saved to [canny_animations](canny_animations).
-
-## Canny Edge Detection with Theta Color Gradient
-I decided to add my own spin on the Canny edge detection algorithm. Because I already calculated the angle of the intensity gradient at every given pixel in my implementation of non-maximum suppresion, I chose to use this value to assign "strong" edges certain color values instead of the white that the original algorithm assigns. Horizontal gradients yield blue, vertical ones yield red, and green for 45 degree slants (the rest is linearly interpolated). The details for converting theta into an RGB value can be found in [helper_rainbow_fill.py](src/edge_detection_algorithms/helper_rainbow_fill.py). By doing this, I was able to create a more readable output where edge direction is immediately aparent from color. 
-
-I've made it so simply running [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py) will give color (unless you specify the ```--no-color``` parameter), so running the file as previously specified should work. The same applies for the gif maker. Below is [mugen.jpg](images/mugen.jpg) with my Canny edge detector run on it (```--no-color``` on the left, ```--color``` on the right).
+You can see how the Canny edge detector looks on various images (before and after) in [canny_results](canny_results). I have also implemented a Canny gif maker ([canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py)), where you can input a gif in the same way as [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py). Every frame is run through the algorithm, and the resulting gif is saved to [canny_animations](canny_animations). Below is an example of running [canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py) on [haikyuu_spike.gif](images/haikyuu_spike.gif).
 
 <p align="center">
-  <img src="readme_screenshots/colored_canny_mugen.png" alt="Theta Gradient Demo">
+  <img src="canny_animations/canny_haikyuu_spike.gif" alt="Canny GIF">
+</p>
+
+## Canny Edge Detection with Theta Color Gradient
+I decided to add my own spin on the Canny edge detection algorithm. Because I already calculated the angle of the intensity gradient at every given pixel in my implementation of non-maximum suppresion, I chose to use this value to assign "strong" edges certain color values instead of the white that the original algorithm assigns. Horizontal gradients yield cooler colors and vertical gradients yield warmer colors (the rest is linearly interpolated). The details for converting theta into an RGB value can be found in [helper_rainbow_fill.py](src/edge_detection_algorithms/helper_rainbow_fill.py). By doing this, I was able to create a more readable output where edge direction is immediately aparent from color. 
+
+I've made it so simply running [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py) will give color (unless you specify the ```--no-color``` parameter), so running the file as previously specified should work. The same applies for [canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py). Below is [mugen.jpg](images/mugen.jpg) with my Canny edge detector run on it (```--no-color``` on the left, ```--color``` on the right).
+
+<p align="center">
+  <img src="canny_results/canny_mugen_colored.png" alt="Theta Gradient Demo">
+</p>
+
+The same operation on [forgers.jpg](images/forgers.jpg) is shown below. See [canny_haikyuu_spike_colored.gif](canny_animations/canny_haikyuu_spike_colored.gif) for the result when we run [haikyuu_spike.gif](images/haikyuu_spike.gif) through [canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py) with this variation.
+
+<p align="center">
+  <img src="canny_results/canny_forgers_colored.png" alt="Theta Gradient Demo 2">
 </p>
 
 ## Gaussian Blur
