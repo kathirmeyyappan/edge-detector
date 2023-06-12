@@ -23,7 +23,7 @@
   - [canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py)
   - [canny_animations](canny_animations)
 
-- #### [Canny Edge Detection with Theta Color Gradient](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#canny-edge-detection-with-theta-color-gradient)
+- #### [Canny Edge Detection with Theta Color Gradient](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#canny-edge-detection-with-theta-color-gradient-1)
 
 ### Blur Algorithms
 
