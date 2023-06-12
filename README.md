@@ -1,16 +1,26 @@
 # From-scratch Implementations of Edge Detectors and Other Image Processing Algorithms
 This is a collection image processing algorithms, implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
 
+<p align="center>
+  <img src="readme_screenshots/haikyuu_header" alt="Haikyuu Header">
+</p>
+
 ## Table of Contents
 
 ### Edge Detection
 
 - #### [Sobel Edge Detection](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#sobel-edge-detection-1)
   - [sobel_edge_detector.py](src/edge_detection_algorithms/sobel_edge_detector.py)
+  - [sobel_gif_maker.py](src/edge_detection_algorithms/sobel_gif_maker.py)
+  - [canny_animations](canny_animations)
 
 - #### [Canny Edge Detection](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#canny-edge-detection-1)
   - [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py)
   - [canny_results](canny_results)
+  - [canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py)
+  - [canny_animations](canny_animations)
+
+- #### [Canny Edge Detection with Theta Color Gradient](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#canny-edge-detection-with-theta-color-gradient)
 
 ### Blur Algorithms
 
@@ -19,6 +29,7 @@ This is a collection image processing algorithms, implemented from scratch in py
 
   - #### [Box Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#box-blur-1)
     - [box_blur.py](src/blur_algorithms/box_blur.py)
+    - [box_blur_moving_window.py](src/blur_algorithms/box_blur_moving_window.py)
 
   - #### [Median Blur](https://github.com/kathirmeyyappan/simple-image-processing-algorithms/#median-blur-1)
     - [median_blur.py](src/blur_algorithms/median_blur.py)
@@ -55,7 +66,7 @@ My implementation of the Sobel edge detection algorithm is in [sobel_edge_detect
   <img src="readme_screenshots/sobel_mugen.png" alt="Sobel Edge Detection Demonstration">
 </p>
 
-As can be seen, the edges are highlighted with varying intensity and thickness based on the strength and range of the changes in color. The Sobel edge detection method is useful for visualizing edges, but because it does not show thin edges with applicable detail, it is not as useful in general.
+As can be seen, the edges are highlighted with varying intensity and thickness based on the strength and range of the changes in color. The Sobel edge detection method is useful for visualizing edges, but because it does not show thin edges with applicable detail, it is not as useful in general. I have also implemented a Sobel gif maker ([sobel_gif_maker.py](src/edge_detection_algorithms/sobel_gif_maker.py)), where you can input a gif in the same way as [sobel_edge_detector.py](src/edge_detection_algorithms/sobel_edge_detector.py). Every frame is run through the algorithm, and the resulting gif is saved to [canny_animations](canny_animations).
 
 ## Canny Edge Detection
 Canny edge detection takes our implementation one step further. By completely identifying edges as existent or not, it gives a clear picture of where exactly our edges in an image may be, which is very useful for computation. Below is an example of my implementation of Canny edge detection applied on [forgers.jpg](images/forgers.jpg).
@@ -76,7 +87,7 @@ After this, we put our non-maximum suppressed image through a double threshold f
   <img src="readme_screenshots/double_threshold_mugen.png" alt="Double Threshold Demo">
 </p>
 
-Above, bright edges are "strong" and simmer edges are "weak". The final process that we put our image through is hysteresis. We simply iterate through the image, finding every weak pixel. If a weak pixel borders a strong pixel, we make it strong. If it does not, we set its intensity to 0, thus removing more extra noise. The final result of this operation applied on [mugen.jpg](images/mugen.jpg) is shown below (with the double threshold image on the left and the post-hysteresis image on the right).
+Above, bright edges are "strong" and dimmer edges are "weak". The final process that we put our image through is hysteresis. We simply iterate through the image, finding every weak pixel. If a weak pixel borders a strong pixel, we make it strong. If it does not, we set its intensity to 0, thus removing more extra noise. The final result of this operation applied on [mugen.jpg](images/mugen.jpg) is shown below (with the double threshold image on the left and the post-hysteresis image on the right).
 
 <p align="center">
   <img src="readme_screenshots/hysteresis_mugen.png" alt="Hysteresis Demo">
@@ -84,10 +95,18 @@ Above, bright edges are "strong" and simmer edges are "weak". The final process 
 
 Canny edge detection has many more small steps, optimizations, and alternate approaches which I did not cover. Additionally, my verbal explanation of some of the steps does not do justice to how neat some of the math actually ends up being. To learn more about the algorithm, I encourage that you read [here](https://en.wikipedia.org/wiki/Canny_edge_detector). 
 
-My implementation of the Canny edge detector is in [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py). To run this file, run this from the root: ```python3 src/edge_detection_algorithms/canny_edge_detector.py -f [FILEPATH]```, where the filepath is from the root (e.g. ```images/luffy.py```). 
+My implementation of the Canny edge detector is in [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py). To run this file, run this from the root: ```python3 src/edge_detection_algorithms/canny_edge_detector.py -f [FILEPATH] --no-color```, where the filepath is from the root (e.g. ```images/luffy.py```). 
 
-You can see how the Canny edge detector looks on various images (before and after) in [canny_results](canny_results).
+You can see how the Canny edge detector looks on various images (before and after) in [canny_results](canny_results). I have also implemented a Canny gif maker ([canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py)), where you can input a gif in the same way as [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py). Every frame is run through the algorithm, and the resulting gif is saved to [canny_animations](canny_animations).
 
+## Canny Edge Detection with Theta Color Gradient
+I decided to add my own spin on the Canny edge detection algorithm. Because I already calculated the angle of the intensity gradient at every given pixel in my implementation of non-maximum suppresion, I chose to use this value to assign "strong" edges certain color values instead of the white that the original algorithm assigns. Horizontal gradients yield blue, vertical ones yield red, and green for 45 degree slants (the rest is linearly interpolated). The details for converting theta into an RGB value can be found in [helper_rainbow_fill.py](src/edge_detection_algorithms/helper_rainbow_fill.py). By doing this, I was able to create a more readable output where edge direction is immediately aparent from color. 
+
+I've made it so simply running [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py) will give color (unless you specify the ```--no-color``` parameter), so running the file as previously specified should work. The same applies for the gif maker. Below is [mugen.jpg](images/mugen.jpg) with my Canny edge detector run on it (```--no-color``` on the left, ```--color``` on the right).
+
+<p align="center">
+  <img src="readme_screenshots/colored_canny_mugen.png" alt="Theta Gradient Demo">
+</p>
 
 ## Gaussian Blur
 Gaussian blur is a blur algorithm which maintains detail well due to assigning weights based on distance from the original pixel. It makes use of the Gaussian function (also known as 'normal distribution' and 'bell curve') to assign weights when blurring per-pixel. When looking at how to convolve a pixel's surrounds to its own new value, we look to the Gaussian function, centered around this pixel in 2 dimensions, to assign weights for how each of the surrounding pixels will contribute to the center pixel's new RGB values. 
