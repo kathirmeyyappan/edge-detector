@@ -1,6 +1,6 @@
 # Edge Detection From the Ground Up
 
-Shown below is a gif that has been run through my twist on the famous Canny edge detector. Read more to see details about my unique implementation which uses the edge gradient theta value to construct a heat map which shows edge orientation.
+Shown below is a gif that has been run through my twist on the famous Canny edge detector. Read more to see details about my unique implementation which uses the edge gradient theta value to construct a heat map which superimposes color (corresponding to edge orientation/slope) onto the Canny edge detected image.
 <p align="center">  
   <br>
   <img src="readme_screenshots/haikyuu_header.gif" alt="Haikyuu Header GIF">
