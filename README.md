@@ -1,12 +1,12 @@
 # Edge Detection From the Ground Up
 
-#### Shown below is a gif that has been run through my twist on the famous Canny edge detector. Read more to see details about my unique implementation which uses the edge gradient theta value to construct a heat map which shows edge orientation.
+Shown below is a gif that has been run through my twist on the famous Canny edge detector. Read more to see details about my unique implementation which uses the edge gradient theta value to construct a heat map which shows edge orientation.
 <p align="center">  
   <br>
   <img src="readme_screenshots/haikyuu_header.gif" alt="Haikyuu Header GIF" width="90%">
 </p>
 
-#### This repo contains some edge detection algorithms and tools, as well as a collection of simpler image processing algorithms, all implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
+This repo contains some edge detection algorithms and tools, as well as a collection of simpler image processing algorithms, all implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
 
 ## Table of Contents
 
