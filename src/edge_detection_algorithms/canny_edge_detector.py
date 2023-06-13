@@ -116,7 +116,7 @@ def canny_edge_detect(img_arr: np.ndarray, color: bool) -> np.ndarray:
             theta = theta_vals[y, x]
             
             if 0 <= theta < np.pi / 8 or \
-            7 * np.pi / 8 <= theta < np.pi:
+            7 * np.pi / 8 <= theta <= np.pi:
                 adj_1 = convolved_arr[y, x - 1]
                 adj_2 = convolved_arr[y, x + 1]
             
