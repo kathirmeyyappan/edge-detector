@@ -52,10 +52,6 @@ def canny_animate(filename: str, color: bool) -> None:
             gif.seek(n)
             img_arr = np.array(gif.convert("RGB"))
             img_arr_seq.append(img_arr)
-
-    # saving new gif (from list of images) to canny_animation folder
-    img_seq[0].save(f"canny_animations/{gif_name}.gif", 
-                    save_all=True, append_images=img_seq[1:], loop=0)
     
     # applying Canny edge detection to all images in list
     canny_gif_arr = canny_gif(img_arr_seq, color)

@@ -112,7 +112,6 @@ def canny_edge_detect(img_arr: np.ndarray, color: bool) -> np.ndarray:
             if x == 0 or x == WIDTH - 1:
                 continue
                 
-            
             # finding which adjacent angles to check using adjusted theta
             theta = theta_vals[y, x]
             
