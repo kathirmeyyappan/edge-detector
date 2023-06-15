@@ -6,7 +6,9 @@ Shown below is a gif that has been run through my twist on the famous Canny edge
   <img src="readme_screenshots/haikyuu_header.gif" alt="Haikyuu Header GIF">
 </p>
 
-This repo contains some edge detection algorithms and tools, as well as a collection of simpler image processing algorithms, all implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy.
+This repo contains some edge detection algorithms and tools, as well as a collection of simpler image processing algorithms, all implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy. Here is a [YouTube video](https://www.youtube.com/watch?v=ji99sNhIAJE) demonstrating some of the results.
+
+
 
 ## Table of Contents
 
