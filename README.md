@@ -108,7 +108,7 @@ Canny edge detection has many more small steps, optimizations, and alternate app
 
 My implementation of the Canny edge detector is in [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py). To run this file, run this from the root: ```python3 src/edge_detection_algorithms/canny_edge_detector.py -f [FILEPATH] --no-color```, where the filepath is from the root (e.g. ```images/luffy.py```). 
 
-You can see how the Canny edge detector looks on various images (before and after) in [canny_results](canny_results). I have also implemented a Canny gif maker ([canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py)), where you can input a gif in the same way as [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py). Every frame is run through the algorithm, and the resulting gif is saved to [canny_animations](canny_animations). Below is an example of running [canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py) on [haikyuu_spike.gif](images/haikyuu_spike.gif).
+You can see how the Canny edge detector looks on various images (before and after) in [canny_results](canny_results). I have also implemented a Canny gif maker ([canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py)), where you can input a gif in the same way as [canny_edge_detector.py](src/edge_detection_algorithms/canny_edge_detector.py). Every frame is run through the algorithm, and the resulting gif is saved to [canny_animations](canny_animations). Below is an example of running [canny_gif_maker.py](src/edge_detection_algorithms/canny_gif_maker.py) on [araragi.gif](images/araragi.gif).
 
 <p align="center">
   <img src="readme_screenshots/canny_araragi.gif" alt="Canny GIF Demonstration">
