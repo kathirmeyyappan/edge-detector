@@ -3,7 +3,7 @@
 Shown below is a gif that has been run through my twist on the famous Canny edge detector. Read more to see details about my unique implementation which uses the edge gradient theta value to construct a heat map which superimposes color (corresponding to edge orientation/slope) onto the Canny edge detected image.
 <p align="center">  
   <br>
-  <img src="readme_screenshots/haikyuu_header.gif" alt="Haikyuu Header GIF">
+  <img src="https://github.com/kathirmeyyappan/edge-detector/assets/71161498/a2512963-e678-478c-a5ea-b6e98f1ca414" alt="Haikyuu Header GIF">
 </p>
 
 This repo contains some edge detection algorithms and tools, as well as a collection of simpler image processing algorithms, all implemented from scratch in python. Image handling is done with the PIL library and computation is with NumPy. Here is a [YouTube video](https://www.youtube.com/watch?v=ji99sNhIAJE) demonstrating some of the results.
